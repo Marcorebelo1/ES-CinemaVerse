@@ -1,10 +1,10 @@
 package pt.ipleiria.estg.dei.ei.esoft;
 
-import java.util.ArrayList;
-import java.util.List;
+import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaSalas;
 
 public class DadosApp {
     private static DadosApp instance = null;
+    private ListaSalas listaSalas;
 
 //    private List<Livro> livros = new ArrayList<>();
 
@@ -31,9 +31,29 @@ public class DadosApp {
 
     private static void carregarDados() {}
 
-    private static void gravarDados() {}
+    private static void gravarDados() {
+        //Guardar Ficheiro Texto
+
+    }
 
 //    public List<Livro> getLivros() {
 //        return livros;
 //    }
+
+
+
+
+
+
+        public ListaSalas getListaSalas() {
+        if (listaSalas == null) {
+            listaSalas = new ListaSalas();
+        }
+        return listaSalas;
+    }
+
+
+
+
+
 }
