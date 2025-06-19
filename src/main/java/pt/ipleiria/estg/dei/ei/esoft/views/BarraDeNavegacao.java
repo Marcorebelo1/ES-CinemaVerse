@@ -3,9 +3,7 @@ package pt.ipleiria.estg.dei.ei.esoft.views;
 import pt.ipleiria.estg.dei.ei.esoft.DadosApp;
 import pt.ipleiria.estg.dei.ei.esoft.classes.Produto;
 import pt.ipleiria.estg.dei.ei.esoft.classes.utils.IListener;
-import pt.ipleiria.estg.dei.ei.esoft.views.paineis.PainelSalas;
-import pt.ipleiria.estg.dei.ei.esoft.views.paineis.PainelHome;
-import pt.ipleiria.estg.dei.ei.esoft.views.paineis.PainelVenda;
+import pt.ipleiria.estg.dei.ei.esoft.views.paineis.*;
 import pt.ipleiria.estg.dei.ei.esoft.views.popups.PopupCarrinho;
 
 import javax.swing.*;
@@ -44,7 +42,7 @@ public class BarraDeNavegacao extends JFrame {
         // Botões do centro
         JPanel botoesCentro = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 5));
         botoesCentro.setOpaque(false);
-        String[] seccoes = {"Home", "Salas", "Sessões", "Filmes", "Stock", "Vender", "Estatísticas"};
+        String[] seccoes = {"Home", "Salas", "Sessoes", "Filmes", "Stock", "Vender", "Estatísticas"};
         for (String nome : seccoes) {
             JButton btn = criarBotaoTopbar(nome);
             btn.addActionListener(e -> {
@@ -52,6 +50,8 @@ public class BarraDeNavegacao extends JFrame {
                     case "Home" -> btnHomeActionPerformed();
                     case "Salas" -> btnSalasActionPerformed();
                     case "Vender" -> btnVenderActionPerformed();
+                    case "Filmes" -> btnFilmesActionPerformed();
+                    case "Sessoes" -> btnSessoesActionPerformed();
                 }
             });
             botoesCentro.add(btn);
@@ -85,6 +85,8 @@ public class BarraDeNavegacao extends JFrame {
         painelCentral.add(new PainelHome(), "Home");
         painelCentral.add(new PainelSalas(), "Salas");
         painelCentral.add(new PainelVenda(), "Vender");
+        painelCentral.add(new PainelFilmes(), "Filmes");
+        painelCentral.add(new PainelSessoes(), "Sessoes");
 
         // Adicionar à janela
         add(topBar, BorderLayout.NORTH);
@@ -115,6 +117,16 @@ public class BarraDeNavegacao extends JFrame {
     // Botão Vender do diagrama
     private void btnVenderActionPerformed() {
         mostrar("Vender");
+    }
+
+    // Botão Filmes do diagrama
+    private void btnFilmesActionPerformed() {
+        mostrar("Filmes");
+    }
+
+    // Botão Filmes do diagrama
+    private void btnSessoesActionPerformed() {
+        mostrar("Sessoes");
     }
 
     // Metodo comum para alternar vistas

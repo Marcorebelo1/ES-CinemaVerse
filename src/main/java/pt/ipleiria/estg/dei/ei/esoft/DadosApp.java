@@ -1,14 +1,24 @@
 package pt.ipleiria.estg.dei.ei.esoft;
 
 import pt.ipleiria.estg.dei.ei.esoft.classes.Carrinho;
+import pt.ipleiria.estg.dei.ei.esoft.classes.Filme;
+import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaFilmes;
 import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaProdutos;
 import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaSalas;
+import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaSessoes;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DadosApp {
     private static DadosApp instance = null;
     private ListaSalas listaSalas;
     private ListaProdutos listaProdutos;
     private Carrinho carrinho;
+    private ListaFilmes listaFilmes;
+    private List<Filme> filmesCatalogo;
+    private ListaSessoes listaSessoes;
 
 //    private List<Livro> livros = new ArrayList<>();
 
@@ -27,6 +37,20 @@ public class DadosApp {
         listaSalas = new ListaSalas();
         listaProdutos = new ListaProdutos();
         carrinho = new Carrinho();
+        listaFilmes = new ListaFilmes();
+        listaSessoes = new ListaSessoes();
+
+        filmesCatalogo = new ArrayList<>(List.of(
+                //new Filme("Until Up", 90, "12+", "Animação", "Original", false, "Pixar", 0, null),
+                //new Filme("John Sick", 110, "16+", "Ação", "Dublada", true, "Universal", 0, null),
+                new Filme("Avengers: Lamegame", 130, "12+", "Ficção", "Original", true, "Marvel", 0, null),
+                new Filme("My Little Poney: Inside Bowser's Castle", 95, "3+", "Infantil", "Dublada", false, "Nintendo", 0, null),
+                new Filme("Hairy Plotter", 120, "10+", "Fantasia", "Original", false, "WB", 0, null),
+                new Filme("Fast & Curious 5", 105, "14+", "Ação", "Original", true, "Paramount", 0, null)
+        ));
+
+        listaFilmes.addToEndOfList(new Filme("Until Up", 90, "12+", "Animação", "Original", false, "Pixar", 14, LocalDate.now().minusDays(2)));
+        listaFilmes.addToEndOfList(new Filme("John Sick", 110, "16+", "Ação", "Dublada", true, "Universal", 7, LocalDate.now().minusDays(1)));
 
         //carregarDados();
     }
@@ -70,5 +94,28 @@ public class DadosApp {
         return carrinho;
     }
 
+    public ListaFilmes getListaFilmes() {
+        if (listaFilmes == null) {
+            listaFilmes = new ListaFilmes();
+        }
+        return listaFilmes;
+    }
 
+    public List<Filme> getFilmesCatalogo() {
+        return new ArrayList<>(filmesCatalogo);
+    }
+
+    public Filme getFilmeDoCatalogo(String titulo) {
+        return filmesCatalogo.stream()
+                .filter(f -> f.getTitulo().equalsIgnoreCase(titulo))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public ListaSessoes getListaSessoes() {
+        if (listaSessoes == null) {
+            listaSessoes = new ListaSessoes();
+        }
+        return listaSessoes;
+    }
 }

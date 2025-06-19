@@ -11,7 +11,7 @@ import java.awt.*;
 public class PopupDetalhesSala extends JDialog {
 
     // Campos editáveis
-    private JTextField txtFilas, txtLugares;
+    private JTextField txtNome,txtFilas, txtLugares;
     private JComboBox<String> cbDolby, cbAcess, cbAC, cbEstado;
 
     /**
@@ -27,60 +27,93 @@ public class PopupDetalhesSala extends JDialog {
         setSize(400, 400);
         setLocationRelativeTo(parentFrame);
 
-        JPanel formPanel = new JPanel(new GridLayout(7, 2, 10, 10));
+        JPanel formPanel = new JPanel(new GridBagLayout());
         formPanel.setBackground(Color.LIGHT_GRAY);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        int y = 0;
+
+        // Nome da Sala
+        gbc.gridx = 0; gbc.gridy = y;
+        formPanel.add(new JLabel("Nome"), gbc);
+        gbc.gridx = 1;
+        txtNome = new JTextField(sala.getNome());
+        formPanel.add(txtNome, gbc);
+        y++;
 
         // Campo do ID (não editável)
-        formPanel.add(new JLabel("ID"));
+        gbc.gridx = 0; gbc.gridy = y;
+        formPanel.add(new JLabel("ID"), gbc);
+        gbc.gridx = 1;
         JTextField txtId = new JTextField(String.valueOf(sala.getId()));
         txtId.setEditable(false);
-        formPanel.add(txtId);
+        formPanel.add(txtId, gbc);
+        y++;
 
-        // Campos editáveis
-        formPanel.add(new JLabel("Número De Filas"));
+        // Número de Filas
+        gbc.gridx = 0; gbc.gridy = y;
+        formPanel.add(new JLabel("Número De Filas"), gbc);
+        gbc.gridx = 1;
         txtFilas = new JTextField(String.valueOf(sala.getNumFilas()));
-        formPanel.add(txtFilas);
+        formPanel.add(txtFilas, gbc);
+        y++;
 
-        formPanel.add(new JLabel("Número De Lugares Por Fila"));
+        // Lugares por Fila
+        gbc.gridx = 0; gbc.gridy = y;
+        formPanel.add(new JLabel("Número De Lugares Por Fila"), gbc);
+        gbc.gridx = 1;
         txtLugares = new JTextField(String.valueOf(sala.getLugaresPorFila()));
-        formPanel.add(txtLugares);
+        formPanel.add(txtLugares, gbc);
+        y++;
 
         // Campos booleanos como dropdowns
         String[] opcoes = {"Y", "N"};
         String[] opcoes2 = {"A", "I"};
 
-        formPanel.add(new JLabel("Dolby Atmos"));
+        gbc.gridx = 0; gbc.gridy = y;
+        formPanel.add(new JLabel("Dolby Atmos"), gbc);
+        gbc.gridx = 1;
         cbDolby = new JComboBox<>(opcoes);
         cbDolby.setSelectedItem(sala.isDolbyAtmos() ? "Y" : "N");
-        formPanel.add(cbDolby);
+        formPanel.add(cbDolby, gbc);
+        y++;
 
-        formPanel.add(new JLabel("Acessibilidade"));
+        gbc.gridx = 0; gbc.gridy = y;
+        formPanel.add(new JLabel("Acessibilidade"), gbc);
+        gbc.gridx = 1;
         cbAcess = new JComboBox<>(opcoes);
         cbAcess.setSelectedItem(sala.isAcessibilidade() ? "Y" : "N");
-        formPanel.add(cbAcess);
+        formPanel.add(cbAcess, gbc);
+        y++;
 
-        formPanel.add(new JLabel("AC"));
+        gbc.gridx = 0; gbc.gridy = y;
+        formPanel.add(new JLabel("AC"), gbc);
+        gbc.gridx = 1;
         cbAC = new JComboBox<>(opcoes);
         cbAC.setSelectedItem(sala.isArCondicionado() ? "Y" : "N");
-        formPanel.add(cbAC);
+        formPanel.add(cbAC, gbc);
+        y++;
 
-        formPanel.add(new JLabel("Estado"));
+        gbc.gridx = 0; gbc.gridy = y;
+        formPanel.add(new JLabel("Estado"), gbc);
+        gbc.gridx = 1;
         cbEstado = new JComboBox<>(opcoes2);
         cbEstado.setSelectedItem(sala.isAtiva() ? "A" : "I");
-        formPanel.add(cbEstado);
+        formPanel.add(cbEstado, gbc);
 
-
-        //Botões de ação
+        // Botões de ação
         JButton btnModificar = new JButton("Modificar Sala Selecionada");
         JButton btnInativarAtivar = new JButton(sala.isAtiva() ? "Inativar" : "Ativar");
 
-        // Ação para modificar a sala com os novos dados
         btnModificar.addActionListener(e -> {
             try {
+                String nomeNovo = txtNome.getText().trim();
                 int novasFilas = Integer.parseInt(txtFilas.getText());
                 int novosLugares = Integer.parseInt(txtLugares.getText());
 
-                if (novasFilas <= 0 || novosLugares <= 0) {
+                if (nomeNovo.isEmpty() || novasFilas <= 0 || novosLugares <= 0) {
                     JOptionPane.showMessageDialog(this, "Número de filas e lugares deve ser > 0", "Erro de Validação", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
@@ -88,8 +121,9 @@ public class PopupDetalhesSala extends JDialog {
                 boolean dolby = cbDolby.getSelectedItem().equals("Y");
                 boolean acess = cbAcess.getSelectedItem().equals("Y");
                 boolean ac = cbAC.getSelectedItem().equals("Y");
-                boolean ativa = cbEstado.getSelectedItem().equals("Y");
+                boolean ativa = cbEstado.getSelectedItem().equals("A");
 
+                sala.setNome(nomeNovo);
                 sala.setNumFilas(novasFilas);
                 sala.setLugaresPorFila(novosLugares);
                 sala.setDolbyAtmos(dolby);
@@ -104,7 +138,6 @@ public class PopupDetalhesSala extends JDialog {
             }
         });
 
-        // Ação para alternar entre ativar e inativar a sala
         btnInativarAtivar.addActionListener(e -> {
             boolean novoEstado = !sala.isAtiva();
             sala.setAtiva(novoEstado);
@@ -115,11 +148,14 @@ public class PopupDetalhesSala extends JDialog {
                     "Estado da Sala", JOptionPane.INFORMATION_MESSAGE);
         });
 
-        JPanel botoesPanel = new JPanel();
+        gbc.gridx = 0; gbc.gridy = ++y;
+        gbc.gridwidth = 2;
+        JPanel botoesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        botoesPanel.setBackground(Color.LIGHT_GRAY);
         botoesPanel.add(btnModificar);
         botoesPanel.add(btnInativarAtivar);
+        formPanel.add(botoesPanel, gbc);
 
         add(formPanel, BorderLayout.CENTER);
-        add(botoesPanel, BorderLayout.SOUTH);
     }
 }

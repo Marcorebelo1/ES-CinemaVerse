@@ -32,5 +32,11 @@ public class ListaSalas {
         return new ArrayList<>(salas);
     }
 
+    public Sala getSalaByNome(String nome) {
+        return salas.stream()
+                .filter(s -> s.getNome().equalsIgnoreCase(nome))
+                .findFirst()
+                .orElse(null);
+    }
 
 }

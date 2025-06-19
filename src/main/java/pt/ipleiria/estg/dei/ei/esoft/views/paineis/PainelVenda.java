@@ -4,6 +4,7 @@ import pt.ipleiria.estg.dei.ei.esoft.DadosApp;
 import pt.ipleiria.estg.dei.ei.esoft.classes.Produto;
 import pt.ipleiria.estg.dei.ei.esoft.classes.utils.IListener;
 import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaProdutos;
+import pt.ipleiria.estg.dei.ei.esoft.views.popups.PopupConfigurarBilhete;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +25,7 @@ public class PainelVenda extends JPanel implements IListener {
     private JPanel painelProduto;
     private JLabel produtoNome;
     private JLabel produtoPreco;
-    private JButton btnBilhete;
+    private JButton btnConfigurarBilhete;
     private JTextField produtoQty;
 
     public PainelVenda() {
@@ -109,17 +110,17 @@ public class PainelVenda extends JPanel implements IListener {
         priceQuantPanel.add(produtoPreco);
         infoPanel.add(priceQuantPanel);
 
-        btnBilhete = new JButton("Configurar Bilhete");
-        btnBilhete.setVisible(false);
-        btnBilhete.addActionListener(e -> {
-            // Aqui pode abrir um popup ou outro painel para configurar o bilhete
-            JOptionPane.showMessageDialog(this, "Configurar bilhete (ainda não implementado)");
+        btnConfigurarBilhete = new JButton("Configurar Bilhete");
+        btnConfigurarBilhete.setVisible(false);
+        btnConfigurarBilhete.addActionListener(e -> {
+            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            new PopupConfigurarBilhete(parentFrame).setVisible(true);
         });
 
         painelProduto.add(image);
         painelProduto.add(infoPanel);
         painelProduto.add(Box.createHorizontalGlue());
-        painelProduto.add(btnBilhete);
+        painelProduto.add(btnConfigurarBilhete);
 
 
         JPanel wrapper = new JPanel();
@@ -184,7 +185,7 @@ public class PainelVenda extends JPanel implements IListener {
             if (produto != null) {
                 produtoNome.setText(produto.getNome());
                 produtoPreco.setText(String.format("%.2f€", produto.getPreco()));
-                btnBilhete.setVisible(isBilhete());
+                btnConfigurarBilhete.setVisible(isBilhete());
 
                 // Aqui pode adicionar a imagem do produto se tiver
                 // image.setIcon(new ImageIcon(produto.getImagePath()));

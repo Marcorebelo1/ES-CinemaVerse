@@ -4,6 +4,7 @@ public class Sala {
     private static int contadorIds = 1;
 
     private final int id;
+    private String nome;
     private int numFilas;
     private int lugaresPorFila;
     private boolean dolbyAtmos;
@@ -12,8 +13,12 @@ public class Sala {
     private boolean ativa;
 
 
-    public Sala(int numFilas, int lugaresPorFila, boolean dolbyAtmos, boolean acessibilidade, boolean arCondicionado) {
+
+
+    public Sala(String nome, int numFilas, int lugaresPorFila, boolean dolbyAtmos,
+                boolean acessibilidade, boolean arCondicionado) {
         this.id = contadorIds++;
+        this.nome = nome;
         this.numFilas = numFilas;
         this.lugaresPorFila = lugaresPorFila;
         this.dolbyAtmos = dolbyAtmos;
@@ -24,6 +29,10 @@ public class Sala {
 
     public int getId() {
         return id;
+    }
+
+    public String getNome() {
+        return nome;
     }
 
     public int getNumFilas() {
@@ -74,8 +83,14 @@ public class Sala {
         this.arCondicionado = arCondicionado;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     @Override
     public String toString() {
-        return "Sala " + id;
+        return id + "- Sala " + nome;
     }
+
+
 }
