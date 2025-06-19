@@ -1,9 +1,15 @@
 package pt.ipleiria.estg.dei.ei.esoft.views;
 
+import pt.ipleiria.estg.dei.ei.esoft.DadosApp;
+import pt.ipleiria.estg.dei.ei.esoft.classes.Produto;
+import pt.ipleiria.estg.dei.ei.esoft.classes.utils.IListener;
 import pt.ipleiria.estg.dei.ei.esoft.views.paineis.PainelSalas;
 import pt.ipleiria.estg.dei.ei.esoft.views.paineis.PainelHome;
+import pt.ipleiria.estg.dei.ei.esoft.views.paineis.PainelVenda;
+import pt.ipleiria.estg.dei.ei.esoft.views.popups.PopupCarrinho;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
 import java.awt.*;
 
 
@@ -45,6 +51,7 @@ public class BarraDeNavegacao extends JFrame {
                 switch (nome) {
                     case "Home" -> btnHomeActionPerformed();
                     case "Salas" -> btnSalasActionPerformed();
+                    case "Vender" -> btnVenderActionPerformed();
                 }
             });
             botoesCentro.add(btn);
@@ -53,10 +60,16 @@ public class BarraDeNavegacao extends JFrame {
         // Icons à direita
         JPanel iconesDireita = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         iconesDireita.setOpaque(false);
-        JLabel carrinho = new JLabel("\uD83D\uDED2"); // carrinho
-        JLabel disquete = new JLabel("\uD83D\uDCBE"); // disquete
+//        JLabel carrinho = new JLabel("\uD83D\uDED2"); // carrinho
+//        JLabel disquete = new JLabel("\uD83D\uDCBE"); // disquete
+        JButton carrinho = criarBotaoTopbar("\uD83D\uDED2"); // carrinho
+        JButton disquete = criarBotaoTopbar("\uD83D\uDCBE"); // disquete
         carrinho.setFont(new Font("SansSerif", Font.PLAIN, 18));
         disquete.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        carrinho.addActionListener(e -> {
+            // Aqui pode abrir o popup do carrinho
+            new PopupCarrinho(this).setVisible(true);
+        });
         iconesDireita.add(carrinho);
         iconesDireita.add(disquete);
 
@@ -71,11 +84,22 @@ public class BarraDeNavegacao extends JFrame {
         // Paineis de Conteudo
         painelCentral.add(new PainelHome(), "Home");
         painelCentral.add(new PainelSalas(), "Salas");
+        painelCentral.add(new PainelVenda(), "Vender");
 
         // Adicionar à janela
         add(topBar, BorderLayout.NORTH);
         add(painelCentral, BorderLayout.CENTER);
         setVisible(true);
+
+        // Dados de teste
+        DadosApp.getInstance().getListaProdutos().adicionarProduto(new Produto("Maça", "Fruta", 1.50));
+        DadosApp.getInstance().getListaProdutos().adicionarProduto(new Produto("Banana", "Fruta", 0.99));
+        DadosApp.getInstance().getListaProdutos().adicionarProduto(new Produto("Leite", "Laticínio", 2.30));
+        DadosApp.getInstance().getListaProdutos().adicionarProduto(new Produto("Menu Criança", "Bilhete", 8.20));
+
+        DadosApp.getInstance().getListaProdutos().getProdutos().forEach(produto -> {
+            DadosApp.getInstance().getCarrinho().adicionarItem(produto);
+        });
     }
 
     // Botão Home do diagrama
@@ -88,9 +112,20 @@ public class BarraDeNavegacao extends JFrame {
         mostrar("Salas");
     }
 
+    // Botão Vender do diagrama
+    private void btnVenderActionPerformed() {
+        mostrar("Vender");
+    }
+
     // Metodo comum para alternar vistas
     private void mostrar(String nomePainel) {
         cardLayout.show(painelCentral, nomePainel);
+        Component[] comp = painelCentral.getComponents();
+        for (Component component : comp) {
+            if (component instanceof IListener listener) {
+                listener.update();
+            }
+        }
     }
 
     private JButton criarBotaoTopbar(String texto) {

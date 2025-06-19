@@ -1,10 +1,14 @@
 package pt.ipleiria.estg.dei.ei.esoft;
 
+import pt.ipleiria.estg.dei.ei.esoft.classes.Carrinho;
+import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaProdutos;
 import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaSalas;
 
 public class DadosApp {
     private static DadosApp instance = null;
     private ListaSalas listaSalas;
+    private ListaProdutos listaProdutos;
+    private Carrinho carrinho;
 
 //    private List<Livro> livros = new ArrayList<>();
 
@@ -19,6 +23,12 @@ public class DadosApp {
 //        livros.add(new Livro("A Sibila", "Agustina Bessa-Luís", "9789722115632"));
 //        livros.add(new Livro("Jerusalém", "Gonçalo M. Tavares", "9789726081940"));
 //        livros.add(new Livro("Nenhum Olhar", "José Luís Peixoto", "9789720048505"));
+
+        listaSalas = new ListaSalas();
+        listaProdutos = new ListaProdutos();
+        carrinho = new Carrinho();
+
+        //carregarDados();
     }
 
     public static DadosApp getInstance() {
@@ -29,7 +39,8 @@ public class DadosApp {
         return instance;
     }
 
-    private static void carregarDados() {}
+    private static void carregarDados() {
+    }
 
     private static void gravarDados() {
         //Guardar Ficheiro Texto
@@ -41,19 +52,23 @@ public class DadosApp {
 //    }
 
 
-
-
-
-
-        public ListaSalas getListaSalas() {
+    public ListaSalas getListaSalas() {
         if (listaSalas == null) {
             listaSalas = new ListaSalas();
         }
         return listaSalas;
     }
 
+    public ListaProdutos getListaProdutos() {
+        return listaProdutos;
+    }
 
-
+    public Carrinho getCarrinho() {
+        if (carrinho == null) {
+            carrinho = new Carrinho();
+        }
+        return carrinho;
+    }
 
 
 }
