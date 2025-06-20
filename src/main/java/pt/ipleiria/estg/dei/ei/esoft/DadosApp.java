@@ -19,6 +19,7 @@ public class DadosApp {
     private ListaFilmes listaFilmes;
     private List<Filme> filmesCatalogo;
     private ListaSessoes listaSessoes;
+    private List<String> categorias;
 
 //    private List<Livro> livros = new ArrayList<>();
 
@@ -39,6 +40,7 @@ public class DadosApp {
         carrinho = new Carrinho();
         listaFilmes = new ListaFilmes();
         listaSessoes = new ListaSessoes();
+        categorias = new ArrayList<>(List.of("Bilhete", "Bebida", "Comida"));
 
         filmesCatalogo = new ArrayList<>(List.of(
                 //new Filme("Until Up", 90, "12+", "Animação", "Original", false, "Pixar", 0, null),
@@ -117,5 +119,9 @@ public class DadosApp {
             listaSessoes = new ListaSessoes();
         }
         return listaSessoes;
+    }
+
+    public List<String> getCategorias() {
+        return new ArrayList<>(categorias);
     }
 }

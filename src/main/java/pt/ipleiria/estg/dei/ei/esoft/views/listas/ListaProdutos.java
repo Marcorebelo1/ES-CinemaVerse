@@ -1,7 +1,9 @@
 package pt.ipleiria.estg.dei.ei.esoft.views.listas;
 
+import pt.ipleiria.estg.dei.ei.esoft.DadosApp;
 import pt.ipleiria.estg.dei.ei.esoft.classes.Produto;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +19,17 @@ public class ListaProdutos {
         return produtos.stream().map(Produto::getCategoria).distinct().toList();
     }
 
-    public void adicionarProduto(Produto produto) {
-        if (produtos == null) {
-            produtos = new ArrayList<>();
+    public boolean adicionarProduto(Produto produto) {
+        try {
+            if (produtos == null) {
+                produtos = new ArrayList<>();
+
+            }
+            produtos.add(produto);
+            return true;
+        }catch (Exception e) {
+            return false;
         }
-        produtos.add(produto);
+
     }
 }

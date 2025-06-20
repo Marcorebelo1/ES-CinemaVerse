@@ -52,6 +52,7 @@ public class BarraDeNavegacao extends JFrame {
                     case "Vender" -> btnVenderActionPerformed();
                     case "Filmes" -> btnFilmesActionPerformed();
                     case "Sessoes" -> btnSessoesActionPerformed();
+                    case "Stock" -> btnStockActionPerformed();
                 }
             });
             botoesCentro.add(btn);
@@ -87,6 +88,7 @@ public class BarraDeNavegacao extends JFrame {
         painelCentral.add(new PainelVenda(), "Vender");
         painelCentral.add(new PainelFilmes(), "Filmes");
         painelCentral.add(new PainelSessoes(), "Sessoes");
+        painelCentral.add(new PainelStock(), "Stock");
 
         // Adicionar à janela
         add(topBar, BorderLayout.NORTH);
@@ -94,10 +96,10 @@ public class BarraDeNavegacao extends JFrame {
         setVisible(true);
 
         // Dados de teste
-        DadosApp.getInstance().getListaProdutos().adicionarProduto(new Produto("Maça", "Fruta", 1.50));
-        DadosApp.getInstance().getListaProdutos().adicionarProduto(new Produto("Banana", "Fruta", 0.99));
-        DadosApp.getInstance().getListaProdutos().adicionarProduto(new Produto("Leite", "Laticínio", 2.30));
-        DadosApp.getInstance().getListaProdutos().adicionarProduto(new Produto("Menu Criança", "Bilhete", 8.20));
+        DadosApp.getInstance().getListaProdutos().adicionarProduto(new Produto("Maça", "Fruta", 1.50, 10));
+        DadosApp.getInstance().getListaProdutos().adicionarProduto(new Produto("Banana", "Fruta", 0.99, 5));
+        DadosApp.getInstance().getListaProdutos().adicionarProduto(new Produto("Leite", "Laticínio", 2.30, 20));
+        DadosApp.getInstance().getListaProdutos().adicionarProduto(new Produto("Menu Criança", "Bilhete", 8.20, 0));
 
         DadosApp.getInstance().getListaProdutos().getProdutos().forEach(produto -> {
             DadosApp.getInstance().getCarrinho().adicionarItem(produto);
@@ -127,6 +129,11 @@ public class BarraDeNavegacao extends JFrame {
     // Botão Filmes do diagrama
     private void btnSessoesActionPerformed() {
         mostrar("Sessoes");
+    }
+
+    // Botão Stock do diagrama
+    private void btnStockActionPerformed() {
+        mostrar("Stock");
     }
 
     // Metodo comum para alternar vistas
