@@ -13,6 +13,7 @@ public class PopupDetalhesSala extends JDialog {
     // Campos editáveis
     private JTextField txtNome,txtFilas, txtLugares;
     private JComboBox<String> cbDolby, cbAcess, cbAC, cbEstado;
+    private JLabel lblEstado;
 
     /**
      * Construtor do popup de detalhes da sala.
@@ -99,9 +100,8 @@ public class PopupDetalhesSala extends JDialog {
         gbc.gridx = 0; gbc.gridy = y;
         formPanel.add(new JLabel("Estado"), gbc);
         gbc.gridx = 1;
-        cbEstado = new JComboBox<>(opcoes2);
-        cbEstado.setSelectedItem(sala.isAtiva() ? "A" : "I");
-        formPanel.add(cbEstado, gbc);
+        lblEstado = new JLabel(sala.isAtiva() ? "Ativo" : "Inativo");
+        formPanel.add(lblEstado, gbc);
 
         // Botões de ação
         JButton btnModificar = new JButton("Modificar Sala Selecionada");
@@ -121,7 +121,7 @@ public class PopupDetalhesSala extends JDialog {
                 boolean dolby = cbDolby.getSelectedItem().equals("Y");
                 boolean acess = cbAcess.getSelectedItem().equals("Y");
                 boolean ac = cbAC.getSelectedItem().equals("Y");
-                boolean ativa = cbEstado.getSelectedItem().equals("A");
+                boolean ativa = sala.isAtiva();
 
                 sala.setNome(nomeNovo);
                 sala.setNumFilas(novasFilas);
@@ -141,7 +141,7 @@ public class PopupDetalhesSala extends JDialog {
         btnInativarAtivar.addActionListener(e -> {
             boolean novoEstado = !sala.isAtiva();
             sala.setAtiva(novoEstado);
-            cbEstado.setSelectedItem(novoEstado ? "A" : "I");
+            lblEstado.setText(novoEstado ? "Ativo" : "Inativo");
             btnInativarAtivar.setText(novoEstado ? "Inativar" : "Ativar");
             JOptionPane.showMessageDialog(this,
                     novoEstado ? "Sala reativada com sucesso!" : "Sala inativada com sucesso!",

@@ -43,35 +43,15 @@ public class PopupAdicionarSala extends JDialog {
 
         // Botão Confirmar
         JButton btnConfirmar = new JButton("Confirmar");
-        btnConfirmar.addActionListener(e -> {
-            try {
-                String nome = txtNome.getText().trim();
-                int filas = Integer.parseInt(txtFilas.getText());
-                int lugares = Integer.parseInt(txtLugares.getText());
-
-                if (nome.isEmpty() || filas <= 0 || lugares <= 0) {
-                    JOptionPane.showMessageDialog(this, "Todos os campos devem ser preenchidos corretamente.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                boolean dolby = cbDolby.getSelectedItem().equals("Y");
-                boolean acess = cbAcess.getSelectedItem().equals("Y");
-                boolean ac = cbAC.getSelectedItem().equals("Y");
-
-                Sala novaSala = new Sala(nome, filas, lugares, dolby, acess, ac);
-                boolean sucesso = DadosApp.getInstance().getListaSalas().addToEndOfList(novaSala);
-
-                if (sucesso) {
-                    JOptionPane.showMessageDialog(this, "Sala criada com sucesso!");
-                    painelSalas.atualizarLista();
-                    dispose();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Erro ao guardar a sala.", "Erro", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Campos numéricos inválidos.", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        });
+        btnConfirmar.addActionListener(e -> btnConfirmarActionPerformed(
+                txtNome,
+                txtFilas,
+                txtLugares,
+                cbDolby,
+                cbAcess,
+                cbAC,
+                painelSalas
+        ));
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(btnConfirmar);
@@ -81,5 +61,48 @@ public class PopupAdicionarSala extends JDialog {
 
         setSize(400, 350);
         setLocationRelativeTo(parentFrame);
+    }
+
+    private void btnConfirmarActionPerformed(
+            JTextField txtNome,
+            JTextField txtFilas,
+            JTextField txtLugares,
+            JComboBox<String> cbDolby,
+            JComboBox<String> cbAcess,
+            JComboBox<String> cbAC,
+            PainelSalas painelSalas
+    ) {
+        try {
+            String nome = txtNome.getText().trim();
+            int filas = Integer.parseInt(txtFilas.getText());
+            int lugares = Integer.parseInt(txtLugares.getText());
+
+            if (nome.isEmpty() || filas <= 0 || lugares <= 0) {
+            mostrarErro("Todos os campos devem ser preenchidos corretamente.");
+            return;
+            }
+
+            boolean dolby = cbDolby.getSelectedItem().equals("Y");
+            boolean acess = cbAcess.getSelectedItem().equals("Y");
+            boolean ac = cbAC.getSelectedItem().equals("Y");
+
+            Sala novaSala = new Sala(nome, filas, lugares, dolby, acess, ac);
+            boolean response = DadosApp.getInstance().getListaSalas().addToEndOfList(novaSala);
+            if (response) {
+                JOptionPane.showMessageDialog(this, "Sala criada com sucesso!");
+                painelSalas.atualizarLista();
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao guardar a sala.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (NumberFormatException ex) {
+            //validação
+            mostrarErro("Campos numéricos inválidos. (Nº de Filas e Lugares sao campos numericos, nao utilizam texto)");
+        }
+    }
+
+    private void mostrarErro(String message) {
+        JOptionPane.showMessageDialog(this, message, "Erro", JOptionPane.ERROR_MESSAGE);
     }
 }

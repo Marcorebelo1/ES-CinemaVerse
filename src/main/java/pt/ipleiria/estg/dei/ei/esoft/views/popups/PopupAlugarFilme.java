@@ -30,8 +30,6 @@ public class PopupAlugarFilme extends JDialog {
                 .sorted()
                 .forEach(comboTitulos::addItem);
 
-
-
         JTextField txtCategoria = new JTextField();
         JTextField txtDuracao = new JTextField();
         JTextField txtIdade = new JTextField();
@@ -157,53 +155,8 @@ public class PopupAlugarFilme extends JDialog {
         formPanel.add(txtPreco, gbc); y++;
 
         JButton btnAlugar = new JButton("Alugar");
-        btnAlugar.addActionListener(e -> {
-            try {
-                String titulo = comboTitulos.getSelectedItem().toString().trim();
-                Filme base = DadosApp.getInstance().getFilmeDoCatalogo(titulo);
 
-                String categoria;
-                int duracao;
-                String idade;
-                String fornecedor;
-
-                if (base != null) {
-                    categoria = base.getCategoria();
-                    duracao = base.getDuracao();
-                    idade = base.getClassificacaoEtaria();
-                    fornecedor = base.getFornecedor();
-                } else {
-                    categoria = txtCategoria.getText().trim();
-                    duracao = Integer.parseInt(txtDuracao.getText().trim());
-                    idade = txtIdade.getText().trim();
-                    fornecedor = txtFornecedor.getText().trim();
-                }
-
-                int diasLicenca = 7;
-                if (rb1Mes.isSelected()) {
-                    diasLicenca = 30;
-                } else if (rbXSemanas.isSelected()) {
-                    diasLicenca = Integer.parseInt(txtNSemanas.getText().trim()) * 7;
-                }
-
-                String versao = rbOriginal.isSelected() ? "Original" : "Dublada";
-                boolean is3D = rb3DSim.isSelected();
-
-                Filme novoFilme = new Filme(titulo, duracao, idade, categoria, versao, is3D, fornecedor, diasLicenca, LocalDate.now());
-
-                boolean sucesso = DadosApp.getInstance().getListaFilmes().addToEndOfList(novoFilme);
-                if (sucesso) {
-                    JOptionPane.showMessageDialog(this, "Filme alugado com sucesso!");
-                    painelFilmes.atualizarLista();
-                    dispose();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Erro ao guardar filme.", "Erro", JOptionPane.ERROR_MESSAGE);
-                }
-
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Campos inválidos. Verifique os dados inseridos.", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        });
+        btnAlugar.addActionListener(e -> btnAlugarActionPerformed(comboTitulos, txtCategoria, txtDuracao, txtIdade, txtFornecedor, txtNSemanas, rb1Mes, rbXSemanas, rbOriginal, rb3DSim, painelFilmes));
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(btnAlugar);
@@ -213,5 +166,65 @@ public class PopupAlugarFilme extends JDialog {
 
         setSize(600, 500);
         setLocationRelativeTo(parentFrame);
+    }
+
+    private void btnAlugarActionPerformed(
+            JComboBox<String> comboTitulos,
+            JTextField txtCategoria,
+            JTextField txtDuracao,
+            JTextField txtIdade,
+            JTextField txtFornecedor,
+            JTextField txtNSemanas,
+            JRadioButton rb1Mes,
+            JRadioButton rbXSemanas,
+            JRadioButton rbOriginal,
+            JRadioButton rb3DSim,
+            PainelFilmes painelFilmes
+    ) {
+        try {
+            String titulo = comboTitulos.getSelectedItem().toString().trim();
+            Filme base = DadosApp.getInstance().getFilmeDoCatalogo(titulo);
+
+            String categoria;
+            int duracao;
+            String idade;
+            String fornecedor;
+
+            if (base != null) {
+                categoria = base.getCategoria();
+                duracao = base.getDuracao();
+                idade = base.getClassificacaoEtaria();
+                fornecedor = base.getFornecedor();
+            } else {
+                categoria = txtCategoria.getText().trim();
+                duracao = Integer.parseInt(txtDuracao.getText().trim());
+                idade = txtIdade.getText().trim();
+                fornecedor = txtFornecedor.getText().trim();
+            }
+
+            int diasLicenca = 7;
+            if (rb1Mes.isSelected()) {
+                diasLicenca = 30;
+            } else if (rbXSemanas.isSelected()) {
+                diasLicenca = Integer.parseInt(txtNSemanas.getText().trim()) * 7;
+            }
+
+            String versao = rbOriginal.isSelected() ? "Original" : "Dublada";
+            boolean is3D = rb3DSim.isSelected();
+
+            Filme novoFilme = new Filme(titulo, duracao, idade, categoria, versao, is3D, fornecedor, diasLicenca, LocalDate.now());
+
+            boolean response = DadosApp.getInstance().getListaFilmes().addToEndOfList(novoFilme);
+            if (response) {
+                JOptionPane.showMessageDialog(this, "Filme alugado com sucesso!");
+                painelFilmes.atualizarLista();
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao guardar filme.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Campos inválidos. Verifique os dados inseridos.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

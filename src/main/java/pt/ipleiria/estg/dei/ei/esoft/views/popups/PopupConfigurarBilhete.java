@@ -49,11 +49,11 @@ public class PopupConfigurarBilhete extends JDialog {
 
         JScrollPane scroll = new JScrollPane(painelLugares);
 
-        JButton btnConfirmar = new JButton("Adicionar ao carrinho");
-        btnConfirmar.addActionListener(e -> confirmarLugar());
+        JButton btnAdicionarAoCarrinho = new JButton("Adicionar ao carrinho");
+        btnAdicionarAoCarrinho.addActionListener(e -> btnAdicionarAoCarrinhoActionPerformed());
 
         JPanel botoes = new JPanel();
-        botoes.add(btnConfirmar);
+        botoes.add(btnAdicionarAoCarrinho);
 
         add(topo, BorderLayout.NORTH);
         add(scroll, BorderLayout.CENTER);
@@ -136,7 +136,7 @@ public class PopupConfigurarBilhete extends JDialog {
         lugaresBtns[fila][lugar].setBackground(Color.YELLOW);
     }
 
-    private void confirmarLugar() {
+    private void btnAdicionarAoCarrinhoActionPerformed() {
         if (filaSelecionada == -1 || lugarSelecionado == -1 || sessaoSelecionada == null) {
             JOptionPane.showMessageDialog(this, "Selecione um lugar primeiro.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
