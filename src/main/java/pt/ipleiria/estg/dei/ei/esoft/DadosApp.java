@@ -2,6 +2,7 @@ package pt.ipleiria.estg.dei.ei.esoft;
 
 import pt.ipleiria.estg.dei.ei.esoft.classes.Carrinho;
 import pt.ipleiria.estg.dei.ei.esoft.classes.Filme;
+import pt.ipleiria.estg.dei.ei.esoft.classes.Produto;
 import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaFilmes;
 import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaProdutos;
 import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaSalas;
@@ -15,6 +16,7 @@ import java.util.List;
 public class DadosApp implements Serializable {
     private static DadosApp instance = null;
     private static final String FILE_NAME = "dadosApp.bin";
+    private static final String RECEIPT_FOLDER_NAME = "faturas";
     private static final long serialVersionUID = 1L;
 
     private ListaSalas listaSalas;
@@ -140,5 +142,35 @@ public class DadosApp implements Serializable {
             categorias = new ArrayList<>(List.of("Bilhete", "Bebida", "Comida"));
         }
         return new ArrayList<>(categorias);
+    }
+
+    public void guardarFaturaCompra(ArrayList<Produto> produtos, double finalPrice) {
+        StringBuilder receiptContent = new StringBuilder();
+        receiptContent.append("Fatura de Compra\n");
+        receiptContent.append("Data: ").append(LocalDate.now()).append("\n\n");
+        receiptContent.append("Produtos:\n");
+
+        for (Produto produto : produtos) {
+            receiptContent.append(produto.getNome())
+                    .append(" - Preço: ").append(produto.getPreco()).append("€")
+                    .append(" - Categoria: ").append(produto.getCategoria())
+                    .append("\n");
+        }
+
+        receiptContent.append("\nTotal: ").append(finalPrice).append("\n");
+
+        try {
+            File folder = new File(RECEIPT_FOLDER_NAME);
+            if (!folder.exists()) {
+                folder.mkdir();
+            }
+            String fileName = RECEIPT_FOLDER_NAME + "/fatura_" + LocalDate.now() + ".txt";
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+                writer.write(receiptContent.toString());
+            }
+            System.out.println("Fatura guardada em: " + fileName);
+        } catch (IOException e) {
+            System.err.println("Erro ao guardar fatura: " + e.getMessage());
+        }
     }
 }

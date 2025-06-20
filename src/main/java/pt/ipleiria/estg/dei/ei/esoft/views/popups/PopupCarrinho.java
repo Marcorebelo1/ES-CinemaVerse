@@ -84,6 +84,10 @@ public class PopupCarrinho extends JDialog implements IListener {
         });
 
         JOptionPane.showMessageDialog(this, "Compra efetuada com sucesso!");
+
+        // Guardar fatura de compra em ficheiro texto
+        DadosApp.getInstance().guardarFaturaCompra(new ArrayList<>(carrinho.getProdutos()), carrinho.getFinalPrice());
+
         carrinho.clear();
         dispose();
     }
