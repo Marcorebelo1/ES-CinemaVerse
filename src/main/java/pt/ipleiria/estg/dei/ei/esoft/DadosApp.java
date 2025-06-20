@@ -3,11 +3,13 @@ package pt.ipleiria.estg.dei.ei.esoft;
 import pt.ipleiria.estg.dei.ei.esoft.classes.Carrinho;
 import pt.ipleiria.estg.dei.ei.esoft.classes.Filme;
 import pt.ipleiria.estg.dei.ei.esoft.classes.Produto;
+import pt.ipleiria.estg.dei.ei.esoft.classes.Venda;
 import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaFilmes;
 import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaProdutos;
 import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaSalas;
 import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaSessoes;
 
+import javax.swing.*;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ public class DadosApp implements Serializable {
     private List<Filme> filmesCatalogo;
     private ListaSessoes listaSessoes;
     private List<String> categorias;
+    private List<Venda> vendas = new ArrayList<>();
 
 //    private List<Livro> livros = new ArrayList<>();
 
@@ -83,8 +86,10 @@ public class DadosApp implements Serializable {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
             oos.writeObject(instance);
             System.out.println("Data saved successfully.");
+            JOptionPane.showMessageDialog(null, "Dados guardados com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException e) {
             System.err.println("Error saving data: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao guardar dados: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -142,6 +147,17 @@ public class DadosApp implements Serializable {
             categorias = new ArrayList<>(List.of("Bilhete", "Bebida", "Comida"));
         }
         return new ArrayList<>(categorias);
+    }
+
+    public List<Venda> getVendas() {
+        if (vendas == null) {
+            vendas = new ArrayList<>();
+        }
+        return new ArrayList<>(vendas);
+    }
+
+    public void adicionarVenda(Venda venda) {
+        vendas.add(venda);
     }
 
     public void guardarFaturaCompra(ArrayList<Produto> produtos, double finalPrice) {

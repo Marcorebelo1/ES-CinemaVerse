@@ -3,10 +3,12 @@ package pt.ipleiria.estg.dei.ei.esoft.views.popups;
 import pt.ipleiria.estg.dei.ei.esoft.DadosApp;
 import pt.ipleiria.estg.dei.ei.esoft.classes.Carrinho;
 import pt.ipleiria.estg.dei.ei.esoft.classes.Produto;
+import pt.ipleiria.estg.dei.ei.esoft.classes.Venda;
 import pt.ipleiria.estg.dei.ei.esoft.classes.utils.IListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 
@@ -80,6 +82,7 @@ public class PopupCarrinho extends JDialog implements IListener {
     private void comprar() {
 
         carrinho.getProdutos().forEach(produto -> {
+            DadosApp.getInstance().adicionarVenda(new Venda(produto, LocalDate.now()));
             produto.setStock(produto.getStock() - 1);
         });
 
