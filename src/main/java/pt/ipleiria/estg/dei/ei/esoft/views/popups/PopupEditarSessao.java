@@ -98,15 +98,14 @@ public class PopupEditarSessao extends JDialog {
                 return;
             }
 
-            DadosApp.getInstance().getListaSessoes().removerSessao(sessaoOriginal);
-            boolean response = DadosApp.getInstance().getListaSessoes().addToEndOfList(nova);
-
+            // Atualiza a sessão original
+            boolean response = sessaoOriginal.atualizarSessao(filme, data, horario, sala);
             if (response) {
                 JOptionPane.showMessageDialog(this, "Sessão modificada com sucesso!");
                 painelSessoes.atualizarTabela();
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(this, "Erro ao atualizar sessao.", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Erro ao atualizar a sessão.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
 
 

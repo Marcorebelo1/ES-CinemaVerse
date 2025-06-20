@@ -64,6 +64,26 @@ public class Sessao implements Serializable {
         return this.horario.conflitaCom(outra.horario);
     }
 
+    public boolean atualizarSessao(Filme novoFilme, LocalDate novaData, Horario novoHorario, Sala novaSala) {
+        try {
+            if (novoFilme == null || novoFilme.getTitulo().isEmpty() ||
+                    novaData == null || novoHorario == null ||
+                    novaSala == null || !novaSala.isAtiva()) {
+                return false;
+            }
+
+            // Atualizar os campos
+            this.filme = novoFilme;
+            this.data = novaData;
+            this.horario = novoHorario;
+            this.sala = novaSala;
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     @Override
     public String toString() {
         return data + " " + horario.getInicio() + " - " + filme.getTitulo() + " @ " + sala.getId();

@@ -113,15 +113,8 @@ public class PainelVenda extends JPanel implements IListener {
 
         btnConfigurarBilhete = new JButton("Configurar Bilhete");
         btnConfigurarBilhete.setVisible(false);
-        btnConfigurarBilhete.addActionListener(e -> {
-            Produto p = getProdutoSelecionado();
-            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            System.out.println("ola");
-            for (int i = 0; i < Integer.parseInt(produtoQty.getText()); i++) {
-                Bilhete bilhete = new Bilhete(p);
-                new PopupConfigurarBilhete(parentFrame, bilhete).setVisible(true);
-            }
-        });
+        btnConfigurarBilhete.addActionListener(e -> btnConfigurarBilheteActionPerformed());
+
 
         painelProduto.add(image);
         painelProduto.add(infoPanel);
@@ -145,6 +138,21 @@ public class PainelVenda extends JPanel implements IListener {
         // Junta tudo ao painel
         add(filtrosPanel, BorderLayout.NORTH);
         add(centroPanel, BorderLayout.CENTER);
+    }
+
+    public void btnConfigurarBilheteActionPerformed() {
+        Produto p = getProdutoSelecionado();
+        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+
+        try {
+            int quantidade = Integer.parseInt(produtoQty.getText());
+            for (int i = 0; i < quantidade; i++) {
+                Bilhete bilhete = new Bilhete(p);
+                new PopupConfigurarBilhete(parentFrame, bilhete).setVisible(true);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Quantidade inválida.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void atualizarDropDowns() {
