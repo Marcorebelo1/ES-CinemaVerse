@@ -1,14 +1,14 @@
 package pt.ipleiria.estg.dei.ei.esoft.views.listas;
 
-import pt.ipleiria.estg.dei.ei.esoft.DadosApp;
 import pt.ipleiria.estg.dei.ei.esoft.classes.Produto;
 
-import javax.swing.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListaProdutos {
+public class ListaProdutos implements Serializable {
     private List<Produto> produtos = new ArrayList<>();
+    private static final long serialVersionUID = 1L;
 
     public List<Produto> getProdutos() {
         return new ArrayList<>(produtos);

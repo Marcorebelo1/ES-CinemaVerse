@@ -1,9 +1,11 @@
 package pt.ipleiria.estg.dei.ei.esoft.classes;
 
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Filme {
+public class Filme implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String titulo;
     private int duracao; // em minutos
     private String classificacaoEtaria;

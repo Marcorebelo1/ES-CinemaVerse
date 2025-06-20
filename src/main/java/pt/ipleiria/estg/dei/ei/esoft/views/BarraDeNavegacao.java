@@ -71,6 +71,10 @@ public class BarraDeNavegacao extends JFrame {
             // Aqui pode abrir o popup do carrinho
             new PopupCarrinho(this).setVisible(true);
         });
+        disquete.addActionListener(e -> {
+            // Aqui pode implementar a ação de salvar
+            DadosApp.gravarDados();
+        });
         iconesDireita.add(carrinho);
         iconesDireita.add(disquete);
 
@@ -94,16 +98,6 @@ public class BarraDeNavegacao extends JFrame {
         add(topBar, BorderLayout.NORTH);
         add(painelCentral, BorderLayout.CENTER);
         setVisible(true);
-
-        // Dados de teste
-        DadosApp.getInstance().getListaProdutos().adicionarProduto(new Produto("Maça", "Fruta", 1.50, 10));
-        DadosApp.getInstance().getListaProdutos().adicionarProduto(new Produto("Banana", "Fruta", 0.99, 5));
-        DadosApp.getInstance().getListaProdutos().adicionarProduto(new Produto("Leite", "Laticínio", 2.30, 20));
-        DadosApp.getInstance().getListaProdutos().adicionarProduto(new Produto("Menu Criança", "Bilhete", 8.20, 0));
-
-        DadosApp.getInstance().getListaProdutos().getProdutos().forEach(produto -> {
-            DadosApp.getInstance().getCarrinho().adicionarItem(produto);
-        });
     }
 
     // Botão Home do diagrama

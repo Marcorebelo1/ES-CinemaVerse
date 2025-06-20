@@ -2,6 +2,7 @@
 package pt.ipleiria.estg.dei.ei.esoft.views.popups;
 
 import pt.ipleiria.estg.dei.ei.esoft.DadosApp;
+import pt.ipleiria.estg.dei.ei.esoft.classes.Bilhete;
 import pt.ipleiria.estg.dei.ei.esoft.classes.Produto;
 import pt.ipleiria.estg.dei.ei.esoft.views.paineis.PainelStock;
 
@@ -24,10 +25,14 @@ public class PopupAdicionarProduto extends JDialog {
         JTextField txtPreco = new JTextField();
         JTextField txtStock = new JTextField();
 
-        formPanel.add(lblNome); formPanel.add(txtNome);
-        formPanel.add(lblCategoria); formPanel.add(comboCategoria);
-        formPanel.add(lblPreco); formPanel.add(txtPreco);
-        formPanel.add(lblStock); formPanel.add(txtStock);
+        formPanel.add(lblNome);
+        formPanel.add(txtNome);
+        formPanel.add(lblCategoria);
+        formPanel.add(comboCategoria);
+        formPanel.add(lblPreco);
+        formPanel.add(txtPreco);
+        formPanel.add(lblStock);
+        formPanel.add(txtStock);
 
         JButton btnConfirmar = new JButton("Confirmar");
         btnConfirmar.addActionListener(e -> {

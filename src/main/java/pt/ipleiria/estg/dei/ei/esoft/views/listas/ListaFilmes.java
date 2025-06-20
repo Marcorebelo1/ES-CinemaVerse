@@ -2,14 +2,15 @@ package pt.ipleiria.estg.dei.ei.esoft.views.listas;
 
 import pt.ipleiria.estg.dei.ei.esoft.classes.Filme;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Representa a lista de filmes
  */
-public class ListaFilmes {
-
+public class ListaFilmes implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final List<Filme> filmes = new ArrayList<>();
 
     /**

@@ -6,7 +6,6 @@ import pt.ipleiria.estg.dei.ei.esoft.classes.Produto;
 import pt.ipleiria.estg.dei.ei.esoft.views.paineis.PainelStock;
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 public class PopupEditarProduto extends JDialog {
     public PopupEditarProduto(JFrame parentFrame, PainelStock painelStock, Produto produto) {
@@ -26,7 +25,7 @@ public class PopupEditarProduto extends JDialog {
         JComboBox<String> comboCategoria = new JComboBox<>(DadosApp.getInstance().getCategorias().toArray(new String[0]));
         JTextField txtPreco = new JTextField();
         JTextField txtStock = new JTextField();
-        JLabel txtEstado = new JLabel(produto.isEstado() ? "Ativar" : "Inativar");
+        JLabel txtEstado = new JLabel(produto.isAtivo() ? "Ativar" : "Inativar");
 
 
 
@@ -38,7 +37,7 @@ public class PopupEditarProduto extends JDialog {
 
 
         JButton btnConfirmar = new JButton("Confirmar");
-        JButton btnInativarAtivar = new JButton(produto.isEstado() ? "Inativar" : "Ativar");
+        JButton btnInativarAtivar = new JButton(produto.isAtivo() ? "Inativar" : "Ativar");
 
 
 
@@ -70,7 +69,7 @@ public class PopupEditarProduto extends JDialog {
         });
 
         btnInativarAtivar.addActionListener(e -> {
-            boolean novoEstado = !produto.isEstado();
+            boolean novoEstado = !produto.isAtivo();
             produto.setEstado(novoEstado);
             txtEstado.setText(novoEstado ? "Ativo" : "Inativo");
             btnInativarAtivar.setText(novoEstado ? "Inativar" : "Ativar");

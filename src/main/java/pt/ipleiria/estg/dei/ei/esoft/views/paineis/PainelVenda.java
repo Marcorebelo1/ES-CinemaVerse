@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.dei.ei.esoft.views.paineis;
 
 import pt.ipleiria.estg.dei.ei.esoft.DadosApp;
+import pt.ipleiria.estg.dei.ei.esoft.classes.Bilhete;
 import pt.ipleiria.estg.dei.ei.esoft.classes.Produto;
 import pt.ipleiria.estg.dei.ei.esoft.classes.utils.IListener;
 import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaProdutos;
@@ -113,8 +114,13 @@ public class PainelVenda extends JPanel implements IListener {
         btnConfigurarBilhete = new JButton("Configurar Bilhete");
         btnConfigurarBilhete.setVisible(false);
         btnConfigurarBilhete.addActionListener(e -> {
+            Produto p = getProdutoSelecionado();
             JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            new PopupConfigurarBilhete(parentFrame).setVisible(true);
+            System.out.println("ola");
+            for (int i = 0; i < Integer.parseInt(produtoQty.getText()); i++) {
+                Bilhete bilhete = new Bilhete(p);
+                new PopupConfigurarBilhete(parentFrame, bilhete).setVisible(true);
+            }
         });
 
         painelProduto.add(image);
@@ -163,7 +169,8 @@ public class PainelVenda extends JPanel implements IListener {
         String categoriaSelecionada = (String) comboCategoria.getSelectedItem();
         for (Produto produto : listaProdutos.getProdutos()) {
             if (categoriaSelecionada == null || categoriaSelecionada.equals("Todas") || produto.getCategoria().equals(categoriaSelecionada)) {
-                modelProdutos.addElement(produto.getNome());
+                if (produto.isAtivo() && produto.getStock() > 0)
+                    modelProdutos.addElement(produto.getNome());
             }
         }
         if (modelProdutos.getSize() != 0) {
@@ -205,10 +212,21 @@ public class PainelVenda extends JPanel implements IListener {
                     .orElse(null);
             if (produto != null) {
                 int quantidade = Integer.parseInt(produtoQty.getText());
+                if (quantidade <= 0) {
+                    JOptionPane.showMessageDialog(this, "Quantidade inválida!", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if (produto.getStock() < DadosApp.getInstance().getCarrinho().getProdutosQuantidade().getOrDefault(produto, 0) + quantidade) {
+                    JOptionPane.showMessageDialog(this, "Quantidade em stock insuficiente!", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 for (int i = 0; i < quantidade; i++) {
                     // Adiciona o produto ao carrinho a quantidade especificada
                     // Aqui pode verificar se o produto já existe no carrinho e atualizar a quantidade se necessário
                     // Por simplicidade, estamos apenas adicionando o produto diretamente
+                    if (produto instanceof Bilhete bilhete) {
+                        bilhete.getSessao().setLugarOcupado(bilhete.getNumeroFila(), bilhete.getNumeroLugar(), true);
+                    }
                     DadosApp.getInstance().getCarrinho().adicionarItem(produto);
                 }
                 JOptionPane.showMessageDialog(this, "Produto adicionado ao carrinho!");
@@ -230,6 +248,17 @@ public class PainelVenda extends JPanel implements IListener {
             return produto != null && produto.getCategoria().equals("Bilhete");
         }
         return false;
+    }
+
+    private Produto getProdutoSelecionado() {
+        String produtoSelecionado = (String) comboProduto.getSelectedItem();
+        if (produtoSelecionado != null && !produtoSelecionado.isEmpty()) {
+            return listaProdutos.getProdutos().stream()
+                    .filter(p -> p.getNome().equals(produtoSelecionado))
+                    .findFirst()
+                    .orElse(null);
+        }
+        return null;
     }
 
     @Override

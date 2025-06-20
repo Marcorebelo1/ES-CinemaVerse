@@ -2,6 +2,7 @@ package pt.ipleiria.estg.dei.ei.esoft.views.listas;
 
 import pt.ipleiria.estg.dei.ei.esoft.classes.Sala;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,9 +10,10 @@ import java.util.List;
  * Representa a lista de salas (modelo de dados real).
  * Substitui o antigo repositório.
  */
-public class ListaSalas {
+public class ListaSalas implements Serializable {
 
     private final List<Sala> salas = new ArrayList<>();
+    private static final long serialVersionUID = 1L;
 
     /**
      * Adiciona uma nova sala à lista.

@@ -14,14 +14,16 @@ public class PopupConfigurarBilhete extends JDialog {
     private final JPanel painelLugares;
     private JButton[][] lugaresBtns;
 
+    private Bilhete bilhete;
     private Sessao sessaoSelecionada;
     private int filaSelecionada = -1;
     private int lugarSelecionado = -1;
 
-    public PopupConfigurarBilhete(JFrame parent) {
+    public PopupConfigurarBilhete(JFrame parent, Bilhete bilhete) {
         super(parent, "Configurar Bilhete", true);
         setLayout(new BorderLayout(10, 10));
 
+        this.bilhete = bilhete;
         comboFilmes = new JComboBox<>();
         comboSessoes = new JComboBox<>();
         painelLugares = new JPanel();
@@ -34,6 +36,8 @@ public class PopupConfigurarBilhete extends JDialog {
                 .sorted()
                 .forEach(comboFilmes::addItem);
 
+        atualizarSessoes();
+        mostrarDisposicaoSalaDaSessao();
         comboFilmes.addActionListener(e -> atualizarSessoes());
         comboSessoes.addActionListener(e -> mostrarDisposicaoSalaDaSessao());
 
@@ -45,7 +49,7 @@ public class PopupConfigurarBilhete extends JDialog {
 
         JScrollPane scroll = new JScrollPane(painelLugares);
 
-        JButton btnConfirmar = new JButton("Confirmar");
+        JButton btnConfirmar = new JButton("Adicionar ao carrinho");
         btnConfirmar.addActionListener(e -> confirmarLugar());
 
         JPanel botoes = new JPanel();
@@ -86,6 +90,8 @@ public class PopupConfigurarBilhete extends JDialog {
 
         sessaoSelecionada = DadosApp.getInstance().getListaSessoes().getSessoes().stream()
                 .filter(s -> s.getFilme().getTitulo().equals(titulo))
+                .filter(s -> sessaoStr.contains(s.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .filter(s -> sessaoStr.contains(s.getHorario().getInicio().format(DateTimeFormatter.ofPattern("HH:mm"))))
                 .filter(s -> sessaoStr.contains(s.getSala().getNome()))
                 .findFirst()
                 .orElse(null);
@@ -103,10 +109,15 @@ public class PopupConfigurarBilhete extends JDialog {
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < lugaresPorFila; j++) {
                 JButton btn = new JButton((i + 1) + "-" + (j + 1));
-                btn.setBackground(Color.GREEN);
-                int finalI = i;
-                int finalJ = j;
-                btn.addActionListener(e -> selecionarLugar(finalI, finalJ));
+                if (sessaoSelecionada.getLugarOcupado(i, j)) {
+                    btn.setEnabled(false);
+                    btn.setBackground(Color.YELLOW);
+                } else {
+                    int finalI = i;
+                    int finalJ = j;
+                    btn.addActionListener(e -> selecionarLugar(finalI, finalJ));
+                    btn.setBackground(Color.GREEN);
+                }
                 lugaresBtns[i][j] = btn;
                 painelLugares.add(btn);
             }
@@ -132,8 +143,15 @@ public class PopupConfigurarBilhete extends JDialog {
         }
 
         // Aqui será associada a informação ao bilhete (por outro membro)
+        bilhete.setSessao(sessaoSelecionada);
+        bilhete.setNumeroFila(filaSelecionada);
+        bilhete.setNumeroLugar(lugarSelecionado);
 
-        JOptionPane.showMessageDialog(this, "Bilhete configurado com sucesso!");
+        bilhete.getSessao().setLugarOcupado(bilhete.getNumeroFila(), bilhete.getNumeroLugar(), true);
+        DadosApp.getInstance().getCarrinho().adicionarItem(bilhete);
+        JOptionPane.showMessageDialog(this, "Bilhete adicionado ao carrinho!");
+
         dispose();
+
     }
 }

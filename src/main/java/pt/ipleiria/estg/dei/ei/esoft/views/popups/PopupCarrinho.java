@@ -14,7 +14,6 @@ public class PopupCarrinho extends JDialog implements IListener {
     private DefaultListModel<String> productModel;
     private JList<String> cartList;
     private JLabel finalPriceLabel;
-    private java.util.List<Double> prices;
 
     private Carrinho carrinho;
 
@@ -24,7 +23,6 @@ public class PopupCarrinho extends JDialog implements IListener {
         setLocationRelativeTo(parent);
 
         productModel = new DefaultListModel<>();
-        prices = new ArrayList<>();
         finalPriceLabel = new JLabel("", SwingConstants.CENTER);
         carrinho = DadosApp.getInstance().getCarrinho();
         carrinho.setListener(this);
@@ -38,10 +36,7 @@ public class PopupCarrinho extends JDialog implements IListener {
         removeButton.addActionListener(e -> removeSelectedItem());
 
         JButton confirmButton = new JButton("Comprar");
-        confirmButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Purchase confirmed!");
-            dispose();
-        });
+        confirmButton.addActionListener(e -> comprar());
 
         // Right-side layout with BoxLayout
         Box rightBox = Box.createVerticalBox();
@@ -72,7 +67,7 @@ public class PopupCarrinho extends JDialog implements IListener {
     private void updateLista() {
         productModel.clear();
         for (Produto produto : carrinho.getProdutos()) {
-            productModel.addElement(produto.getNome() + " - " + String.format("%.2f", produto.getPreco()) + "€");
+            productModel.addElement(produto.toString() + " - " + String.format("%.2f", produto.getPreco()) + "€");
         }
         finalPriceLabel.setText("Preço Final:\n " + String.format("%.2f", carrinho.getFinalPrice()) + "€");
     }
@@ -80,5 +75,16 @@ public class PopupCarrinho extends JDialog implements IListener {
     @Override
     public void update() {
         updateLista();
+    }
+
+    private void comprar() {
+
+        carrinho.getProdutos().forEach(produto -> {
+            produto.setStock(produto.getStock() - 1);
+        });
+
+        JOptionPane.showMessageDialog(this, "Compra efetuada com sucesso!");
+        carrinho.clear();
+        dispose();
     }
 }

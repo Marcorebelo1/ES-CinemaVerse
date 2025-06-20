@@ -7,12 +7,16 @@ import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaProdutos;
 import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaSalas;
 import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaSessoes;
 
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DadosApp {
+public class DadosApp implements Serializable {
     private static DadosApp instance = null;
+    private static final String FILE_NAME = "dadosApp.bin";
+    private static final long serialVersionUID = 1L;
+
     private ListaSalas listaSalas;
     private ListaProdutos listaProdutos;
     private Carrinho carrinho;
@@ -35,12 +39,12 @@ public class DadosApp {
 //        livros.add(new Livro("Jerusalém", "Gonçalo M. Tavares", "9789726081940"));
 //        livros.add(new Livro("Nenhum Olhar", "José Luís Peixoto", "9789720048505"));
 
+        categorias = new ArrayList<>(List.of("Bilhete", "Bebida", "Comida"));
         listaSalas = new ListaSalas();
         listaProdutos = new ListaProdutos();
         carrinho = new Carrinho();
         listaFilmes = new ListaFilmes();
         listaSessoes = new ListaSessoes();
-        categorias = new ArrayList<>(List.of("Bilhete", "Bebida", "Comida"));
 
         filmesCatalogo = new ArrayList<>(List.of(
                 //new Filme("Until Up", 90, "12+", "Animação", "Original", false, "Pixar", 0, null),
@@ -53,8 +57,6 @@ public class DadosApp {
 
         listaFilmes.addToEndOfList(new Filme("Until Up", 90, "12+", "Animação", "Original", false, "Pixar", 14, LocalDate.now().minusDays(2)));
         listaFilmes.addToEndOfList(new Filme("John Sick", 110, "16+", "Ação", "Dublada", true, "Universal", 7, LocalDate.now().minusDays(1)));
-
-        //carregarDados();
     }
 
     public static DadosApp getInstance() {
@@ -66,12 +68,24 @@ public class DadosApp {
     }
 
     private static void carregarDados() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
+            instance = (DadosApp) ois.readObject();
+            System.out.println("Data loaded successfully.");
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Error loading data: " + e.getMessage());
+        }
     }
 
-    private static void gravarDados() {
-        //Guardar Ficheiro Texto
-
+    //Guardar em Ficheiro Texto
+    public static void gravarDados() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
+            oos.writeObject(instance);
+            System.out.println("Data saved successfully.");
+        } catch (IOException e) {
+            System.err.println("Error saving data: " + e.getMessage());
+        }
     }
+
 
 //    public List<Livro> getLivros() {
 //        return livros;
@@ -122,6 +136,9 @@ public class DadosApp {
     }
 
     public List<String> getCategorias() {
+        if (categorias == null) {
+            categorias = new ArrayList<>(List.of("Bilhete", "Bebida", "Comida"));
+        }
         return new ArrayList<>(categorias);
     }
 }

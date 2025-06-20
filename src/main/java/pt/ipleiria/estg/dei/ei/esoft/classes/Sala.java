@@ -1,6 +1,9 @@
 package pt.ipleiria.estg.dei.ei.esoft.classes;
 
-public class Sala {
+import java.io.Serializable;
+
+public class Sala implements Serializable {
+    private static final long serialVersionUID = 1L;
     private static int contadorIds = 1;
 
     private final int id;

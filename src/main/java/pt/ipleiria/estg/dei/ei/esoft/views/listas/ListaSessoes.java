@@ -4,6 +4,7 @@ import pt.ipleiria.estg.dei.ei.esoft.classes.Horario;
 import pt.ipleiria.estg.dei.ei.esoft.classes.Sala;
 import pt.ipleiria.estg.dei.ei.esoft.classes.Sessao;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +12,8 @@ import java.util.List;
 /**
  * Representa a lista de sessões (modelo de dados real).
  */
-public class ListaSessoes {
-
+public class ListaSessoes implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final List<Sessao> sessoes = new ArrayList<>();
 
     /**

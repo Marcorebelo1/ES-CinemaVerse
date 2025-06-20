@@ -22,8 +22,9 @@ public class PopupLugaresDisponiveis extends JDialog {
         JPanel grid = new JPanel(new GridLayout(filas, lugaresPorFila, 5, 5));
         for (int f = 0; f < filas; f++) {
             for (int l = 0; l < lugaresPorFila; l++) {
+                boolean ocupado = sessao.getLugarOcupado(f, l);
                 JButton btnLugar = new JButton((f + 1) + "-" + (l + 1));
-                btnLugar.setBackground(Color.GREEN); // Todos disponíveis por agora
+                btnLugar.setBackground(ocupado ? Color.YELLOW : Color.GREEN); // Todos disponíveis por agora
                 grid.add(btnLugar);
             }
         }
