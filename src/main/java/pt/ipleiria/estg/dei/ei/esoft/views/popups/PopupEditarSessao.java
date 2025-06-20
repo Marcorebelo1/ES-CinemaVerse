@@ -46,63 +46,15 @@ public class PopupEditarSessao extends JDialog {
         form.add(new JLabel("Hora")); form.add(txtHora);
         form.add(new JLabel("Sala")); form.add(comboSalas);
 
-        JButton btnModificar = new JButton("Modificar Sessão");
-        btnModificar.addActionListener(e -> {
-            try {
-                String titulo = (String) comboFilmes.getSelectedItem();
-                Filme filme = DadosApp.getInstance().getListaFilmes().getFilmeByTitulo(titulo);
-                if (filme == null) throw new Exception("Filme inválido");
-
-                LocalDate data = LocalDate.parse(txtData.getText(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-                LocalTime hora = LocalTime.parse(txtHora.getText(), DateTimeFormatter.ofPattern("HH:mm"));
-                Horario horario = new Horario(hora, hora.plusMinutes(filme.getDuracao()));
-
-                if (data.isAfter(filme.getDataAluguer().plusDays(filme.getDuracaoLicencaDias()))) {
-                    JOptionPane.showMessageDialog(this, "O filme já não está dentro do período de licença.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                String nomeSala = (String) comboSalas.getSelectedItem();
-                Sala sala = DadosApp.getInstance().getListaSalas().getSalaByNome(nomeSala);
-                if (sala == null || !sala.isAtiva()) {
-                    JOptionPane.showMessageDialog(this, "Sala inválida ou inativa.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                Sessao nova = new Sessao(filme, data, horario, sala);
-                boolean conflito = DadosApp.getInstance().getListaSessoes().getSessoes().stream()
-                        .filter(s -> !s.equals(sessaoOriginal)) // Ignora a própria sessão
-                        .filter(s -> s.getSala().equals(sala))
-                        .filter(s -> s.getData().equals(data))
-                        .anyMatch(s -> s.getHorario().conflitaCom(horario));
-
-                if (conflito) {
-                    JOptionPane.showMessageDialog(this, "Já existe uma sessão nessa sala e horário!", "Erro de Conflito", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-
-                DadosApp.getInstance().getListaSessoes().removerSessao(sessaoOriginal);
-                DadosApp.getInstance().getListaSessoes().addToEndOfList(nova);
-                JOptionPane.showMessageDialog(this, "Sessão modificada com sucesso!");
-                painelSessoes.atualizarTabela();
-                dispose();
-
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Dados inválidos.", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        });
+        JButton btnModificarSessao = new JButton("Modificar Sessão");
+        btnModificarSessao.addActionListener(e -> btnModificarSessaoActionPerformed(painelSessoes, sessaoOriginal));
 
         JButton btnRemover = new JButton("Remover");
-        btnRemover.addActionListener(e -> {
-            DadosApp.getInstance().getListaSessoes().removerSessao(sessaoOriginal);
-            JOptionPane.showMessageDialog(this, "Sessão removida.");
-            painelSessoes.atualizarTabela();
-            dispose();
-        });
+        btnRemover.addActionListener(e -> btnRemoverSessaoActionPerformed(painelSessoes, sessaoOriginal));
+
 
         JPanel botoes = new JPanel();
-        botoes.add(btnModificar);
+        botoes.add(btnModificarSessao);
         botoes.add(btnRemover);
 
         add(form, BorderLayout.CENTER);
@@ -111,4 +63,63 @@ public class PopupEditarSessao extends JDialog {
         setSize(400, 250);
         setLocationRelativeTo(parent);
     }
+
+    private void btnModificarSessaoActionPerformed(PainelSessoes painelSessoes, Sessao sessaoOriginal) {
+        try {
+            String titulo = (String) comboFilmes.getSelectedItem();
+            Filme filme = DadosApp.getInstance().getListaFilmes().getFilmeByTitulo(titulo);
+            if (filme == null) throw new Exception("Filme inválido");
+
+            LocalDate data = LocalDate.parse(txtData.getText(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+            LocalTime hora = LocalTime.parse(txtHora.getText(), DateTimeFormatter.ofPattern("HH:mm"));
+            Horario horario = new Horario(hora, hora.plusMinutes(filme.getDuracao()));
+
+            if (data.isAfter(filme.getDataAluguer().plusDays(filme.getDuracaoLicencaDias()))) {
+                JOptionPane.showMessageDialog(this, "O filme já não está dentro do período de licença.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String nomeSala = (String) comboSalas.getSelectedItem();
+            Sala sala = DadosApp.getInstance().getListaSalas().getSalaByNome(nomeSala);
+            if (sala == null || !sala.isAtiva()) {
+                JOptionPane.showMessageDialog(this, "Sala inválida ou inativa.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Sessao nova = new Sessao(filme, data, horario, sala);
+            boolean conflito = DadosApp.getInstance().getListaSessoes().getSessoes().stream()
+                    .filter(s -> !s.equals(sessaoOriginal))
+                    .filter(s -> s.getSala().equals(sala))
+                    .filter(s -> s.getData().equals(data))
+                    .anyMatch(s -> s.getHorario().conflitaCom(horario));
+
+            if (conflito) {
+                JOptionPane.showMessageDialog(this, "Já existe uma sessão nessa sala e horário!", "Erro de Conflito", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            DadosApp.getInstance().getListaSessoes().removerSessao(sessaoOriginal);
+            boolean response = DadosApp.getInstance().getListaSessoes().addToEndOfList(nova);
+
+            if (response) {
+                JOptionPane.showMessageDialog(this, "Sessão modificada com sucesso!");
+                painelSessoes.atualizarTabela();
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao atualizar sessao.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Dados inválidos.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void btnRemoverSessaoActionPerformed(PainelSessoes painelSessoes, Sessao sessaoOriginal) {
+        DadosApp.getInstance().getListaSessoes().removerSessao(sessaoOriginal);
+        JOptionPane.showMessageDialog(this, "Sessão removida.");
+        painelSessoes.atualizarTabela();
+        dispose();
+    }
+
 }

@@ -54,7 +54,7 @@ public class PainelFilmes extends JPanel {
         scrollPane.setPreferredSize(new Dimension(300, 200));
 
         // Botões laterais
-        JButton btnAlugar = new JButton("Alugar filme");
+        JButton btnAlugarFilmes = new JButton("Alugar filme");
         JButton btnDetalhes = new JButton("Detalhes");
 
         JPanel botoesPanel = new JPanel();
@@ -62,19 +62,16 @@ public class PainelFilmes extends JPanel {
         botoesPanel.setBackground(Color.LIGHT_GRAY);
         botoesPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        btnAlugar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnAlugarFilmes.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnDetalhes.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         botoesPanel.add(Box.createVerticalGlue());
-        botoesPanel.add(btnAlugar);
+        botoesPanel.add(btnAlugarFilmes);
         botoesPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         botoesPanel.add(btnDetalhes);
         botoesPanel.add(Box.createVerticalGlue());
 
-        btnAlugar.addActionListener(e -> {
-            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            new PopupAlugarFilme(parentFrame, this).setVisible(true);
-        });
+        btnAlugarFilmes.addActionListener(e -> btnAlugarFilmesActionPerformed());
 
         btnDetalhes.addActionListener(e -> {
             int index = listaFilmes.getSelectedIndex();
@@ -98,6 +95,16 @@ public class PainelFilmes extends JPanel {
 
         atualizarLista();
     }
+
+    public void btnAlugarFilmesActionPerformed() {
+        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        mostrarPopupAlugarFilme(parentFrame);
+    }
+
+    private void mostrarPopupAlugarFilme(JFrame parentFrame) {
+        new PopupAlugarFilme(parentFrame, this).setVisible(true);
+    }
+
 
     /**
      * Atualiza a lista de filmes com base nos filtros.

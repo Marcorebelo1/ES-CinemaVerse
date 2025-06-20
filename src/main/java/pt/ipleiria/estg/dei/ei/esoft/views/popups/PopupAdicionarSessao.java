@@ -76,60 +76,7 @@ public class PopupAdicionarSessao extends JDialog {
         form.add(new JLabel("Duração")); form.add(txtDuracao);
 
         JButton btnAdicionar = new JButton("Adicionar Sessão");
-        btnAdicionar.addActionListener(e -> {
-            try {
-                String titulo = (String) comboFilmes.getSelectedItem();
-                Filme filme = DadosApp.getInstance().getListaFilmes().getFilmeByTitulo(titulo);
-                if (filme == null) throw new Exception("Filme inválido");
-
-                // 1. Validar Data e Hora
-                LocalDate data = LocalDate.parse(txtData.getText(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-                LocalTime hora = LocalTime.parse(txtHora.getText(), DateTimeFormatter.ofPattern("HH:mm"));
-                Horario horario = new Horario(hora, hora.plusMinutes(filme.getDuracao()));
-
-
-                // 2. Verificar se o filme está dentro da validade da licença
-                LocalDate inicioLicenca = filme.getDataAluguer();
-                LocalDate fimLicenca = inicioLicenca.plusDays(filme.getDuracaoLicencaDias());
-                if (data.isBefore(inicioLicenca) || data.isAfter(fimLicenca)) {
-                    JOptionPane.showMessageDialog(this,
-                            "A sessão está fora do período de licença do filme.\n" +
-                                    "Licença válida de " + inicioLicenca + " até " + fimLicenca + ".",
-                            "Licença Expirada", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                // 3. Validar Sala
-                String nomeSala = (String) comboSalas.getSelectedItem();
-                Sala sala = DadosApp.getInstance().getListaSalas().getSalaByNome(nomeSala);
-                if (sala == null || !sala.isAtiva()) {
-                    JOptionPane.showMessageDialog(this, "Sala inválida ou inativa.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                // 4. Verificar compatibilidade da sala com características do filme
-                if (filme.isIs3D() && !sala.isDolbyAtmos()) {
-                    JOptionPane.showMessageDialog(this, "O filme requer uma sala compatível com Dolby Atmos (3D).", "Erro", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                // 5. Verificar disponibilidade da sala no horário
-                if (!DadosApp.getInstance().getListaSessoes().isSalaDisponivel(sala, data, horario)) {
-                    JOptionPane.showMessageDialog(this, "Sala não disponível para este horário.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                // Se tudo estiver OK, cria a sessão
-                Sessao nova = new Sessao(filme, data, horario, sala);
-                DadosApp.getInstance().getListaSessoes().addToEndOfList(nova);
-                JOptionPane.showMessageDialog(this, "Sessão adicionada!");
-                painelSessoes.atualizarTabela();
-                dispose();
-
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Dados inválidos. Verifique todos os campos.", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        });
+        btnAdicionar.addActionListener(e -> btnAdicionarActionPerformed(painelSessoes));
 
         JPanel botoes = new JPanel();
         botoes.add(btnAdicionar);
@@ -139,6 +86,66 @@ public class PopupAdicionarSessao extends JDialog {
 
         setSize(400, 300);
         setLocationRelativeTo(parent);
+    }
+
+
+    private void btnAdicionarActionPerformed(PainelSessoes painelSessoes) {
+        try {
+            String titulo = (String) comboFilmes.getSelectedItem();
+            Filme filme = DadosApp.getInstance().getListaFilmes().getFilmeByTitulo(titulo);
+            if (filme == null) throw new Exception("Filme inválido");
+
+            // 1. Validar Data e Hora
+            LocalDate data = LocalDate.parse(txtData.getText(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+            LocalTime hora = LocalTime.parse(txtHora.getText(), DateTimeFormatter.ofPattern("HH:mm"));
+            Horario horario = new Horario(hora, hora.plusMinutes(filme.getDuracao()));
+
+            // 2. Verificar se o filme está dentro da validade da licença
+            LocalDate inicioLicenca = filme.getDataAluguer();
+            LocalDate fimLicenca = inicioLicenca.plusDays(filme.getDuracaoLicencaDias());
+            if (data.isBefore(inicioLicenca) || data.isAfter(fimLicenca)) {
+                JOptionPane.showMessageDialog(this,
+                        "A sessão está fora do período de licença do filme.\n" +
+                                "Licença válida de " + inicioLicenca + " até " + fimLicenca + ".",
+                        "Licença Expirada", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // 3. Validar Sala
+            String nomeSala = (String) comboSalas.getSelectedItem();
+            Sala sala = DadosApp.getInstance().getListaSalas().getSalaByNome(nomeSala);
+            if (sala == null || !sala.isAtiva()) {
+                JOptionPane.showMessageDialog(this, "Sala inválida ou inativa.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // 4. Verificar compatibilidade da sala com características do filme
+            if (filme.isIs3D() && !sala.isDolbyAtmos()) {
+                JOptionPane.showMessageDialog(this, "O filme requer uma sala compatível com Dolby Atmos (3D).", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // 5. Verificar disponibilidade da sala no horário
+            if (!DadosApp.getInstance().getListaSessoes().isSalaDisponivel(sala, data, horario)) {
+                JOptionPane.showMessageDialog(this, "Sala não disponível para este horário.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Tudo OK → criar sessão
+            Sessao nova = new Sessao(filme, data, horario, sala);
+            boolean response = DadosApp.getInstance().getListaSessoes().addToEndOfList(nova);
+            if (response) {
+                JOptionPane.showMessageDialog(this, "Sessão adicionada!");
+                painelSessoes.atualizarTabela();
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao guardar Sessao.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Dados inválidos. Verifique todos os campos.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void atualizarSalasDisponiveis() {

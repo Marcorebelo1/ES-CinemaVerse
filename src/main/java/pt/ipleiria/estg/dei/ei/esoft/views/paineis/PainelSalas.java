@@ -45,7 +45,7 @@ public class PainelSalas extends JPanel {
         scrollPane.setPreferredSize(new Dimension(300, 200));
 
         // Botões verticais à direita
-        JButton btnAdicionar = new JButton("Adicionar Sala");
+        JButton btnAdicionarSala = new JButton("Adicionar Sala");
         JButton btnDetalhes = new JButton("Detalhes");
 
         JPanel botoesPanel = new JPanel();
@@ -53,21 +53,18 @@ public class PainelSalas extends JPanel {
         botoesPanel.setBackground(Color.LIGHT_GRAY);
         botoesPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        btnAdicionar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnAdicionarSala.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnDetalhes.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         botoesPanel.add(Box.createVerticalGlue());
-        botoesPanel.add(btnAdicionar);
+        botoesPanel.add(btnAdicionarSala);
         botoesPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         botoesPanel.add(btnDetalhes);
         botoesPanel.add(Box.createVerticalGlue());
 
         // Ação do botão "Adicionar Sala"
-        btnAdicionar.addActionListener(e -> {
-            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            PopupAdicionarSala popup = new PopupAdicionarSala(parentFrame, this);
-            popup.setVisible(true);
-        });
+        btnAdicionarSala.addActionListener(e -> btnAdicionarSalaActionPerformed());
+
 
         // Ação do botão "Detalhes"
         btnDetalhes.addActionListener(e -> {
@@ -95,6 +92,15 @@ public class PainelSalas extends JPanel {
     }
 
 
+    public void btnAdicionarSalaActionPerformed() {
+        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        mostrarPopupAdicionarSala(parentFrame);
+    }
+
+    private void mostrarPopupAdicionarSala(JFrame parentFrame) {
+        PopupAdicionarSala popup = new PopupAdicionarSala(parentFrame, this);
+        popup.setVisible(true);
+    }
 
     /**
      * Atualiza a lista de salas com base no filtro selecionado

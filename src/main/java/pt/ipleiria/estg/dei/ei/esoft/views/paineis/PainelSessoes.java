@@ -60,31 +60,21 @@ public class PainelSessoes extends JPanel {
         JScrollPane scrollPane = new JScrollPane(tabela);
 
         // Botões
-        JButton btnAdicionar = new JButton("Adicionar Sessão");
+        JButton btnAdicionarSessao = new JButton("Adicionar Sessão");
         JButton btnMapa = new JButton("Mapa de Lugares");
         JButton btnEditar = new JButton("Editar");
 
         JPanel botoesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         botoesPanel.setBackground(Color.LIGHT_GRAY);
-        botoesPanel.add(btnAdicionar);
+        botoesPanel.add(btnAdicionarSessao);
         botoesPanel.add(btnMapa);
         botoesPanel.add(btnEditar);
 
-        btnAdicionar.addActionListener(e -> {
-            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            new PopupAdicionarSessao(parentFrame, this).setVisible(true);
-        });
+        btnAdicionarSessao.addActionListener(e -> btnAdicionarSessaoActionPerformed());
 
-        btnEditar.addActionListener(e -> {
-            int selectedRow = tabela.getSelectedRow();
-            if (selectedRow >= 0) {
-                Sessao sessaoSelecionada = DadosApp.getInstance().getListaSessoes().getSessoes().get(selectedRow);
-                JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-                new PopupEditarSessao(parentFrame, this, sessaoSelecionada).setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(this, "Selecione uma sessão para editar.");
-            }
-        });
+
+        btnEditar.addActionListener(e -> btnEditarSessaoActionPerformed());
+
 
         btnMapa.addActionListener(e -> btnMostrarMapaActionPerformed());
 
@@ -94,6 +84,31 @@ public class PainelSessoes extends JPanel {
         add(botoesPanel, BorderLayout.SOUTH);
 
         atualizarTabela();
+    }
+
+
+    public void btnAdicionarSessaoActionPerformed() {
+        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        mostrarPopupAdicionarSessao(parentFrame);
+    }
+
+    public void btnEditarSessaoActionPerformed() {
+        int selectedRow = tabela.getSelectedRow();
+        if (selectedRow >= 0) {
+            Sessao sessaoSelecionada = DadosApp.getInstance().getListaSessoes().getSessoes().get(selectedRow);
+            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            mostrarPopupEditarSessao(parentFrame, sessaoSelecionada);
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione uma sessão para editar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private void mostrarPopupAdicionarSessao(JFrame parentFrame) {
+        new PopupAdicionarSessao(parentFrame, this).setVisible(true);
+    }
+
+    private void mostrarPopupEditarSessao(JFrame parent, Sessao sessao) {
+        new PopupEditarSessao(parent, this, sessao).setVisible(true);
     }
 
     public void btnMostrarMapaActionPerformed() {
