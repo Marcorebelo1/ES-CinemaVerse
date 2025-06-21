@@ -21,11 +21,12 @@ public class PopupEditarProduto extends JDialog {
 
 
 
-        JTextField txtNome = new JTextField();
+        JTextField txtNome = new JTextField(produto.getNome());
         JComboBox<String> comboCategoria = new JComboBox<>(DadosApp.getInstance().getCategorias().toArray(new String[0]));
-        JTextField txtPreco = new JTextField();
-        JTextField txtStock = new JTextField();
-        JLabel txtEstado = new JLabel(produto.isAtivo() ? "Ativar" : "Inativar");
+        comboCategoria.setSelectedItem(produto.getCategoria());
+        JTextField txtPreco = new JTextField(String.valueOf(produto.getPreco()));
+        JTextField txtStock = new JTextField(String.valueOf(produto.getStock()));
+        JLabel txtEstado = new JLabel(produto.isAtivo() ? "Ativo" : "Inativo");
 
 
 
@@ -53,11 +54,10 @@ public class PopupEditarProduto extends JDialog {
                     return;
                 }
 
-                Produto novoProduto = new Produto(nome, categoria, preco, stock);
-                boolean sucesso = DadosApp.getInstance().getListaProdutos().adicionarProduto(novoProduto);
+                boolean sucesso = produto.EditarProduto(nome, categoria, preco, stock);
 
                 if (sucesso) {
-                    JOptionPane.showMessageDialog(this, "Produto criado com sucesso!");
+                    JOptionPane.showMessageDialog(this, "Produto atualizado com sucesso!");
                     painelStock.atualizarLista();
                     dispose();
                 } else {
@@ -76,6 +76,7 @@ public class PopupEditarProduto extends JDialog {
             JOptionPane.showMessageDialog(this,
                     novoEstado ? "Produto reativado com sucesso!" : "Produto inativado com sucesso!",
                     "Estado do Produto", JOptionPane.INFORMATION_MESSAGE);
+            painelStock.atualizarLista();
         });
 
         JPanel buttonPanel = new JPanel();

@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.dei.ei.esoft.views.popups;
 
 import pt.ipleiria.estg.dei.ei.esoft.DadosApp;
+import pt.ipleiria.estg.dei.ei.esoft.classes.Aluguer;
 import pt.ipleiria.estg.dei.ei.esoft.classes.Filme;
 import pt.ipleiria.estg.dei.ei.esoft.views.paineis.PainelFilmes;
 
@@ -156,7 +157,7 @@ public class PopupAlugarFilme extends JDialog {
 
         JButton btnAlugar = new JButton("Alugar");
 
-        btnAlugar.addActionListener(e -> btnAlugarActionPerformed(comboTitulos, txtCategoria, txtDuracao, txtIdade, txtFornecedor, txtNSemanas, rb1Mes, rbXSemanas, rbOriginal, rb3DSim, painelFilmes));
+        btnAlugar.addActionListener(e -> btnAlugarActionPerformed(comboTitulos, txtCategoria, txtDuracao, txtIdade, txtFornecedor, txtNSemanas, txtPreco, rb1Mes, rbXSemanas, rbOriginal, rb3DSim, painelFilmes));
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(btnAlugar);
@@ -175,6 +176,7 @@ public class PopupAlugarFilme extends JDialog {
             JTextField txtIdade,
             JTextField txtFornecedor,
             JTextField txtNSemanas,
+            JTextField txtPreco,
             JRadioButton rb1Mes,
             JRadioButton rbXSemanas,
             JRadioButton rbOriginal,
@@ -217,6 +219,9 @@ public class PopupAlugarFilme extends JDialog {
             boolean response = DadosApp.getInstance().getListaFilmes().addToEndOfList(novoFilme);
             if (response) {
                 JOptionPane.showMessageDialog(this, "Filme alugado com sucesso!");
+                String clean = txtPreco.getText().replaceAll("[^\\d.,-]", "").replace(",", "."); // keeps digits, dot/comma, minus
+                double preco = Double.parseDouble(clean);
+                DadosApp.getInstance().adicionarAluguer(new Aluguer(novoFilme, LocalDate.now(), preco));
                 painelFilmes.atualizarLista();
                 dispose();
             } else {

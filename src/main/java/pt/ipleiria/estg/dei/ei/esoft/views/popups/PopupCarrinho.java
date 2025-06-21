@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.dei.ei.esoft.views.popups;
 
 import pt.ipleiria.estg.dei.ei.esoft.DadosApp;
+import pt.ipleiria.estg.dei.ei.esoft.classes.Bilhete;
 import pt.ipleiria.estg.dei.ei.esoft.classes.Carrinho;
 import pt.ipleiria.estg.dei.ei.esoft.classes.Produto;
 import pt.ipleiria.estg.dei.ei.esoft.classes.Venda;

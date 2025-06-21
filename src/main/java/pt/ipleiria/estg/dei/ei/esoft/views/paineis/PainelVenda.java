@@ -166,8 +166,6 @@ public class PainelVenda extends JPanel implements IListener {
         for (String categoria : categorias) {
             modelCategorias.addElement(categoria);
         }
-        System.out.println("Produtos: " + listaProdutos.getProdutos().stream().map(Produto::getNome).toList());
-        System.out.println("Categorias: " + listaProdutos.getCategorias());
         atualizerListaProdutos();
     }
 

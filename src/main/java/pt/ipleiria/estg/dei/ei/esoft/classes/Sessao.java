@@ -58,6 +58,17 @@ public class Sessao implements Serializable {
         return sala;
     }
 
+    public boolean temBilhete() {
+        for (List<Boolean> fila : lugaresOcupados) {
+            for (Boolean lugar : fila) {
+                if (lugar) {
+                    return true; // Se algum lugar estiver ocupado, retorna true
+                }
+            }
+        }
+        return false; // Se nenhum lugar estiver ocupado, retorna false
+    }
+
     public boolean conflitaCom(Sessao outra) {
         if (!this.sala.equals(outra.sala)) return false;
         if (!this.data.equals(outra.data)) return false;

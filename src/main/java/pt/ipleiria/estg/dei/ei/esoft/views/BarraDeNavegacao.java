@@ -53,6 +53,8 @@ public class BarraDeNavegacao extends JFrame {
                     case "Filmes" -> btnFilmesActionPerformed();
                     case "Sessoes" -> btnSessoesActionPerformed();
                     case "Stock" -> btnStockActionPerformed();
+                    case "Estatísticas" -> bntEstatisticasActionPerformed();
+
                 }
             });
             botoesCentro.add(btn);
@@ -93,6 +95,7 @@ public class BarraDeNavegacao extends JFrame {
         painelCentral.add(new PainelFilmes(), "Filmes");
         painelCentral.add(new PainelSessoes(), "Sessoes");
         painelCentral.add(new PainelStock(), "Stock");
+        painelCentral.add(new PainelEstatisticas(), "Estatísticas");
 
         // Adicionar à janela
         add(topBar, BorderLayout.NORTH);
@@ -128,6 +131,11 @@ public class BarraDeNavegacao extends JFrame {
     // Botão Stock do diagrama
     private void btnStockActionPerformed() {
         mostrar("Stock");
+    }
+
+    // Botão Estatísticas do diagrama
+    private void bntEstatisticasActionPerformed() {
+        mostrar("Estatísticas");
     }
 
     // Metodo comum para alternar vistas

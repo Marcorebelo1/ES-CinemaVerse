@@ -29,4 +29,13 @@ public class Horario implements Serializable {
     public String toString() {
         return inicio + " - " + fim;
     }
+
+    public String getBlocoHorario() {
+        int hora = inicio.getHour();
+        int horaInicio = (hora / 3) * 3;
+        int horaFim = horaInicio + 3;
+        String inicio = String.format("%02d:00", horaInicio);
+        String fim = String.format("%02d:00", horaFim % 24); // wrap around at 24
+        return inicio + " – " + fim;
+    }
 }

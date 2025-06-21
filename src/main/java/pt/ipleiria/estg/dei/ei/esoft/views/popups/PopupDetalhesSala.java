@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.ei.esoft.views.popups;
 
+import pt.ipleiria.estg.dei.ei.esoft.DadosApp;
 import pt.ipleiria.estg.dei.ei.esoft.classes.Sala;
 
 import javax.swing.*;
@@ -109,6 +110,11 @@ public class PopupDetalhesSala extends JDialog {
 
         btnModificar.addActionListener(e -> {
             try {
+                boolean temSessao = DadosApp.getInstance().getListaSessoes().getSessoes().stream().anyMatch(s -> s.getSala() == sala);
+                if (temSessao) {
+                    JOptionPane.showMessageDialog(this, "Não é possível modificar uma sala com sessões agendadas.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 String nomeNovo = txtNome.getText().trim();
                 int novasFilas = Integer.parseInt(txtFilas.getText());
                 int novosLugares = Integer.parseInt(txtLugares.getText());
@@ -132,6 +138,7 @@ public class PopupDetalhesSala extends JDialog {
                 sala.setAtiva(ativa);
 
                 JOptionPane.showMessageDialog(this, "Sala modificada com sucesso!");
+                dispose();
 
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Campos numéricos inválidos.", "Erro", JOptionPane.ERROR_MESSAGE);

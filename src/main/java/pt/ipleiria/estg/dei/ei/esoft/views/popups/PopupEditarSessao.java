@@ -66,6 +66,11 @@ public class PopupEditarSessao extends JDialog {
 
     private void btnModificarSessaoActionPerformed(PainelSessoes painelSessoes, Sessao sessaoOriginal) {
         try {
+            if (sessaoOriginal.temBilhete()) {
+                JOptionPane.showMessageDialog(this, "Não é possível modificar uma sessão com bilhetes vendidos.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             String titulo = (String) comboFilmes.getSelectedItem();
             Filme filme = DadosApp.getInstance().getListaFilmes().getFilmeByTitulo(titulo);
             if (filme == null) throw new Exception("Filme inválido");

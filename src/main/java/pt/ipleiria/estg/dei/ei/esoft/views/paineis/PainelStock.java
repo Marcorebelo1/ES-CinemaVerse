@@ -17,7 +17,7 @@ public class PainelStock extends JPanel implements IListener {
     private ListaProdutos listaProdutos;
     private JList<Produto> listaProdutosJList;
     private DefaultListModel<Produto> model;
-    private JLabel lblNome, lblCategoria, lblPreco, lblStock;
+    private JLabel lblNome, lblCategoria, lblPreco, lblStock, lblEstado;
     private JComboBox<String> comboCategoria;
 
     public PainelStock() {
@@ -58,11 +58,13 @@ public class PainelStock extends JPanel implements IListener {
         lblCategoria = new JLabel("Categoria: ");
         lblPreco = new JLabel("Preço: ");
         lblStock = new JLabel("Stock: ");
+        lblEstado = new JLabel("Estado: ");
 
         detalhesPanel.add(lblNome);
         detalhesPanel.add(lblCategoria);
         detalhesPanel.add(lblPreco);
         detalhesPanel.add(lblStock);
+        detalhesPanel.add(lblEstado);
 
         // Botões
         JButton btnAdicionar = new JButton("Adicionar Produto");
@@ -132,11 +134,14 @@ public class PainelStock extends JPanel implements IListener {
             lblPreco.setText(String.format("Preço: %.2f€", produto.getPreco()));
             // Supondo que Produto tem getStock(), senão ajuste conforme necessário
             lblStock.setText("Stock: " + (produto.getStock() != 0 ? produto.getStock() : "N/A"));
+            lblEstado.setText("Estado: " + (produto.isAtivo() ? "Ativo" : "Inativo"));
+
         } else {
             lblNome.setText("Nome: ");
             lblCategoria.setText("Categoria: ");
             lblPreco.setText("Preço: ");
             lblStock.setText("Stock: ");
+            lblEstado.setText("Estado: ");
         }
     }
 

@@ -73,6 +73,7 @@ public class PainelSalas extends JPanel {
                 Sala salaSelecionada = listaSalasJList.getSelectedValue();
                 JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
                 new PopupDetalhesSala(parentFrame, salaSelecionada).setVisible(true);
+                atualizarLista();
             } else {
                 JOptionPane.showMessageDialog(this, "Selecione uma sala da lista.", "Aviso", JOptionPane.WARNING_MESSAGE);
             }

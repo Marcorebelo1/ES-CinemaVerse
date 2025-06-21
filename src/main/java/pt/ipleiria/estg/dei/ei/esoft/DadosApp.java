@@ -1,9 +1,6 @@
 package pt.ipleiria.estg.dei.ei.esoft;
 
-import pt.ipleiria.estg.dei.ei.esoft.classes.Carrinho;
-import pt.ipleiria.estg.dei.ei.esoft.classes.Filme;
-import pt.ipleiria.estg.dei.ei.esoft.classes.Produto;
-import pt.ipleiria.estg.dei.ei.esoft.classes.Venda;
+import pt.ipleiria.estg.dei.ei.esoft.classes.*;
 import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaFilmes;
 import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaProdutos;
 import pt.ipleiria.estg.dei.ei.esoft.views.listas.ListaSalas;
@@ -29,6 +26,7 @@ public class DadosApp implements Serializable {
     private ListaSessoes listaSessoes;
     private List<String> categorias;
     private List<Venda> vendas = new ArrayList<>();
+    private List<Aluguer> alugueres = new ArrayList<>();
 
 //    private List<Livro> livros = new ArrayList<>();
 
@@ -158,6 +156,17 @@ public class DadosApp implements Serializable {
 
     public void adicionarVenda(Venda venda) {
         vendas.add(venda);
+    }
+
+    public List<Aluguer> getAlugueres() {
+        if (alugueres == null) {
+            alugueres = new ArrayList<>();
+        }
+        return new ArrayList<>(alugueres);
+    }
+
+    public void adicionarAluguer(Aluguer aluguer) {
+        alugueres.add(aluguer);
     }
 
     public void guardarFaturaCompra(ArrayList<Produto> produtos, double finalPrice) {

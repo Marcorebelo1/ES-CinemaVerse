@@ -34,18 +34,26 @@ public class Produto implements Serializable {
         this.estado = ativo;
     }
 
-    public Produto(String nome, String categoria, double preco) {
-        this.nome = nome;
-        this.categoria = categoria;
-        this.preco = preco;
-        this.stock = 10; // Default stock to 10
-    }
-
     public Produto(String nome, String categoria, double preco, int stock) {
         this.nome = nome;
         this.categoria = categoria;
         this.preco = preco;
         this.stock = stock;
+    }
+
+    public boolean EditarProduto(String nome, String categoria, double preco, int stock) {
+        try {
+            if (nome == null || nome.isEmpty() || categoria == null || categoria.isEmpty() || preco < 0 || stock < 0) {
+                return false;
+            }
+            this.nome = nome;
+            this.categoria = categoria;
+            this.preco = preco;
+            this.stock = stock;
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public void setStock(int newStock) {
@@ -60,5 +68,17 @@ public class Produto implements Serializable {
     @Override
     public String toString() {
         return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public void setPreco(double preco) {
+        this.preco = preco;
     }
 }
