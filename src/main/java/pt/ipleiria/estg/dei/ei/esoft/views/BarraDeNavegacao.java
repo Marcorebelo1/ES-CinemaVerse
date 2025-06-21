@@ -69,10 +69,7 @@ public class BarraDeNavegacao extends JFrame {
         JButton disquete = criarBotaoTopbar("\uD83D\uDCBE"); // disquete
         carrinho.setFont(new Font("SansSerif", Font.PLAIN, 18));
         disquete.setFont(new Font("SansSerif", Font.PLAIN, 18));
-        carrinho.addActionListener(e -> {
-            // Aqui pode abrir o popup do carrinho
-            new PopupCarrinho(this).setVisible(true);
-        });
+        carrinho.addActionListener(e -> btnCarrinhoActionPerformed());
         disquete.addActionListener(e -> {
             // Aqui pode implementar a ação de salvar
             DadosApp.gravarDados();
@@ -101,6 +98,10 @@ public class BarraDeNavegacao extends JFrame {
         add(topBar, BorderLayout.NORTH);
         add(painelCentral, BorderLayout.CENTER);
         setVisible(true);
+    }
+
+    private void btnCarrinhoActionPerformed() {
+        new PopupCarrinho(this).setVisible(true);
     }
 
     // Botão Home do diagrama

@@ -55,7 +55,7 @@ public class PainelVenda extends JPanel implements IListener {
         comboCategoria = new JComboBox<>(modelCategorias);
         categoriaFilterPanel.add(comboCategoria);
 
-        comboCategoria.addActionListener(e -> atualizerListaProdutos()); // Listener de filtro
+        comboCategoria.addActionListener(e -> atualizarListaProdutos()); // Listener de filtro
 
         filtrosPanel.add(produtoFilterPanel);
         filtrosPanel.add(categoriaFilterPanel);
@@ -166,10 +166,10 @@ public class PainelVenda extends JPanel implements IListener {
         for (String categoria : categorias) {
             modelCategorias.addElement(categoria);
         }
-        atualizerListaProdutos();
+        atualizarListaProdutos();
     }
 
-    private void atualizerListaProdutos() {
+    private void atualizarListaProdutos() {
         String produtoSelecionado = (String) comboProduto.getSelectedItem();
         modelProdutos.removeAllElements();
         String categoriaSelecionada = (String) comboCategoria.getSelectedItem();
