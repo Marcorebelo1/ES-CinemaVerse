@@ -7,6 +7,7 @@ import pt.ipleiria.estg.dei.ei.esoft.views.paineis.PainelFilmes;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -47,6 +48,30 @@ public class PopupAlugarFilme extends JDialog {
         grupoLicenca.add(rbXSemanas);
         grupoLicenca.add(rb1Mes);
         rb1Semana.setSelected(true);
+
+        // Atualize o valor do txtPreco sempre que mudar a duração da licença
+        ActionListener atualizarPreco = e -> {
+            int diasLicenca = 7;
+            if (rb1Mes.isSelected()) {
+                diasLicenca = 30;
+            } else if (rbXSemanas.isSelected()) {
+                try {
+                    diasLicenca = Integer.parseInt(txtNSemanas.getText().trim()) * 7;
+                } catch (NumberFormatException ex) {
+                    diasLicenca = 7;
+                }
+            }
+            double preco = 285.0 * diasLicenca;
+            txtPreco.setText(String.format("%.2f€", preco));
+        };
+        rb1Semana.addActionListener(atualizarPreco);
+        rbXSemanas.addActionListener(atualizarPreco);
+        rb1Mes.addActionListener(atualizarPreco);
+        txtNSemanas.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            public void insertUpdate(javax.swing.event.DocumentEvent e) { atualizarPreco.actionPerformed(null); }
+            public void removeUpdate(javax.swing.event.DocumentEvent e) { atualizarPreco.actionPerformed(null); }
+            public void changedUpdate(javax.swing.event.DocumentEvent e) { atualizarPreco.actionPerformed(null); }
+        });
 
         JRadioButton rbOriginal = new JRadioButton("Original");
         JRadioButton rbDublada = new JRadioButton("Dublada");
@@ -210,6 +235,7 @@ public class PopupAlugarFilme extends JDialog {
             } else if (rbXSemanas.isSelected()) {
                 diasLicenca = Integer.parseInt(txtNSemanas.getText().trim()) * 7;
             }
+            double preco = 285.0 * diasLicenca;
 
             String versao = rbOriginal.isSelected() ? "Original" : "Dublada";
             boolean is3D = rb3DSim.isSelected();
@@ -219,8 +245,6 @@ public class PopupAlugarFilme extends JDialog {
             boolean response = DadosApp.getInstance().getListaFilmes().addToEndOfList(novoFilme);
             if (response) {
                 JOptionPane.showMessageDialog(this, "Filme alugado com sucesso!");
-                String clean = txtPreco.getText().replaceAll("[^\\d.,-]", "").replace(",", "."); // keeps digits, dot/comma, minus
-                double preco = Double.parseDouble(clean);
                 DadosApp.getInstance().adicionarAluguer(new Aluguer(novoFilme, LocalDate.now(), preco));
                 painelFilmes.atualizarLista();
                 dispose();
