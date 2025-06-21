@@ -273,8 +273,6 @@ public class PainelVenda extends JPanel implements IListener {
 
     @Override
     public void update() {
-        System.out.println(modelProdutos.getSize());
         atualizarDropDowns();
-        System.out.println(modelProdutos.getSize());
     }
 }

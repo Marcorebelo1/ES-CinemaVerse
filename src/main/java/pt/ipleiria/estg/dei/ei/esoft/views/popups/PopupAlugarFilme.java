@@ -72,6 +72,7 @@ public class PopupAlugarFilme extends JDialog {
             public void removeUpdate(javax.swing.event.DocumentEvent e) { atualizarPreco.actionPerformed(null); }
             public void changedUpdate(javax.swing.event.DocumentEvent e) { atualizarPreco.actionPerformed(null); }
         });
+        atualizarPreco.actionPerformed(null);
 
         JRadioButton rbOriginal = new JRadioButton("Original");
         JRadioButton rbDublada = new JRadioButton("Dublada");
