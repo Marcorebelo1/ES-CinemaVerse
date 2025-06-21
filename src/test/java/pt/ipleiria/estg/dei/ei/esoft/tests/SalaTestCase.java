@@ -7,7 +7,7 @@ import pt.ipleiria.estg.dei.ei.esoft.classes.Sala;
 import pt.ipleiria.estg.dei.ei.esoft.views.popups.PopupAdicionarSala;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+// Author: Marco Rebelo
 public class SalaTestCase {
 
 

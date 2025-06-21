@@ -7,7 +7,7 @@ import pt.ipleiria.estg.dei.ei.esoft.classes.Filme;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+// Author: Marco Rebelo
 public class FilmeTestCase {
 
     //Verifica o Alugar Filme

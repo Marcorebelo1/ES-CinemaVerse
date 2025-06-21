@@ -9,9 +9,8 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
+// Author: Bruno Sampaio
 public class EstatisticaTestCase {
-
 
     @Test
     public void testEstatisticasVendas() {

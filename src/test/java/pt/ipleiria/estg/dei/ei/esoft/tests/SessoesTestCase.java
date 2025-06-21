@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+// Author: Marco Rebelo
 public class SessoesTestCase {
 
     //Testa Sobreposicão entre Sessões

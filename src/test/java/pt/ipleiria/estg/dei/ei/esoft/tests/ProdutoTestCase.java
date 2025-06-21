@@ -6,7 +6,9 @@ import pt.ipleiria.estg.dei.ei.esoft.classes.Produto;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// Author: Bruno Sampaio
 public class ProdutoTestCase {
+
     @Test
     public void testAdicionarProduto() {
         String nomeProduto = "Coca-Cola";
