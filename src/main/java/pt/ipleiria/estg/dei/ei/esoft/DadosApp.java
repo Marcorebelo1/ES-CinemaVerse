@@ -155,6 +155,9 @@ public class DadosApp implements Serializable {
     }
 
     public void adicionarVenda(Venda venda) {
+        if (vendas == null) {
+            vendas = new ArrayList<>();
+        }
         vendas.add(venda);
     }
 
@@ -166,6 +169,9 @@ public class DadosApp implements Serializable {
     }
 
     public void adicionarAluguer(Aluguer aluguer) {
+        if (alugueres == null) {
+            alugueres = new ArrayList<>();
+        }
         alugueres.add(aluguer);
     }
 

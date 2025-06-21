@@ -1,8 +1,10 @@
 package pt.ipleiria.estg.dei.ei.esoft.classes;
 
+import pt.ipleiria.estg.dei.ei.esoft.DadosApp;
 import pt.ipleiria.estg.dei.ei.esoft.classes.utils.IListener;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +49,18 @@ public class Carrinho implements Serializable {
         }
     }
 
+    public void comprar() {
+        getProdutos().forEach(produto -> {
+            DadosApp.getInstance().adicionarVenda(new Venda(produto, LocalDate.now()));
+            produto.setStock(produto.getStock() - 1);
+        });
+
+        // Guardar fatura de compra em ficheiro texto
+        DadosApp.getInstance().guardarFaturaCompra(new ArrayList<>(getProdutos()), getFinalPrice());
+
+        clear();
+    }
+
     public void clear() {
         produtos.clear();
         totalPrice = 0.0;
@@ -58,6 +72,6 @@ public class Carrinho implements Serializable {
     }
 
     private void notifyListener() {
-            if (listener != null) listener.update();
+        if (listener != null) listener.update();
     }
 }

@@ -82,17 +82,10 @@ public class PopupCarrinho extends JDialog implements IListener {
 
     private void comprar() {
 
-        carrinho.getProdutos().forEach(produto -> {
-            DadosApp.getInstance().adicionarVenda(new Venda(produto, LocalDate.now()));
-            produto.setStock(produto.getStock() - 1);
-        });
+        carrinho.comprar();
 
         JOptionPane.showMessageDialog(this, "Compra efetuada com sucesso!");
 
-        // Guardar fatura de compra em ficheiro texto
-        DadosApp.getInstance().guardarFaturaCompra(new ArrayList<>(carrinho.getProdutos()), carrinho.getFinalPrice());
-
-        carrinho.clear();
         dispose();
     }
 }
