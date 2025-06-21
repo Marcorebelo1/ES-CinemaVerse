@@ -217,6 +217,10 @@ public class PainelVenda extends JPanel implements IListener {
                     .findFirst()
                     .orElse(null);
             if (produto != null) {
+                if (produto.getCategoria().equals("Bilhete")) {
+                    JOptionPane.showMessageDialog(this, "Por favor, configure o bilhete antes de adicionar ao carrinho.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
                 int quantidade = Integer.parseInt(produtoQty.getText());
                 if (quantidade <= 0) {
                     JOptionPane.showMessageDialog(this, "Quantidade inválida!", "Erro", JOptionPane.ERROR_MESSAGE);
